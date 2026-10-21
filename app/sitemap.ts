@@ -2,8 +2,13 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/config";
 import { TEMPLATES } from "@/lib/templates";
 
+// /invoice 為「即將推出」佔位頁（noindex），不放入 sitemap
 const STATIC_PATHS = [
   "/",
+  "/services",
+  "/solutions",
+  "/process",
+  "/tools",
   "/quote",
   "/quote/app",
   "/quote/features",
@@ -15,11 +20,13 @@ const STATIC_PATHS = [
   "/terms",
 ];
 
+const HIGH = new Set(["/", "/services"]);
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [...STATIC_PATHS, ...TEMPLATES.map((t) => `/quote/templates/${t.slug}`)];
   return paths.map((p) => ({
     url: `${SITE_URL}${p === "/" ? "" : p}`,
     changeFrequency: p === "/" ? "weekly" : "monthly",
-    priority: p === "/" ? 1 : p === "/quote" || p === "/quote/app" ? 0.9 : 0.7,
+    priority: HIGH.has(p) ? 1 : p === "/contact" || p === "/solutions" ? 0.8 : 0.6,
   }));
 }

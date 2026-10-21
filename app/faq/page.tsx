@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import CtaBand from "@/components/site/CtaBand";
 import Faq from "@/components/site/Faq";
 import PageHero from "@/components/site/PageHero";
+import { Reveal } from "@/components/site/Reveal";
 import { FAQS } from "@/lib/faq";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "常見問題",
   description:
-    "資料存在哪裡、是否免費、怎麼存 PDF、統編怎麼驗證、換電腦資料會不見嗎、可以商用嗎——Seqlon Quote 報價單的常見問題。",
+    "什麼是 AI 本地化、需要多貴的設備、本地 AI 與雲端 AI 的差異、資料會不會外流，以及免費報價助手的常見問題。",
   path: "/faq",
 });
 
@@ -29,11 +30,23 @@ export default function FaqPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <PageHero eyebrow="FAQ" title="常見問題" description="找不到答案？歡迎透過聯絡方式詢問我們。" />
-      <section className="mx-auto w-full max-w-3xl px-4 py-6">
-        <Faq items={FAQS} />
+      <PageHero eyebrow="FAQ" title="常見問題" description="找不到答案？歡迎預約諮詢，直接詢問我們。" />
+      <section className="mx-auto w-full max-w-3xl space-y-10 px-4 py-6">
+        <Reveal>
+          <h2 className="mb-4 text-xl font-bold">AI 本地化</h2>
+          <Faq items={FAQS.filter((f) => f.category === "ai")} />
+        </Reveal>
+        <Reveal>
+          <h2 className="mb-4 text-xl font-bold">免費工具</h2>
+          <Faq items={FAQS.filter((f) => f.category === "tools")} />
+        </Reveal>
       </section>
-      <CtaBand />
+      <CtaBand
+        title="還有其他問題？"
+        description="先聊聊你的需求，我們幫你評估。"
+        href="/contact"
+        label="預約諮詢"
+      />
     </>
   );
 }

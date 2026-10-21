@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
 import LegalPage, { type LegalSection } from "@/components/site/LegalPage";
-import { COMPANY_NAME_EN, CONTACT_EMAIL } from "@/lib/config";
+import { COMPANY_NAME_EN, COMPANY_NAME_ZH, CONTACT_EMAIL } from "@/lib/config";
 import { QUOTE_PRODUCT } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "使用條款",
-  description: "使用 Seqlon 的產品與網站前，請先閱讀使用條款。",
+  description: "使用序隆科技網站與免費工具前，請先閱讀使用條款。",
   path: "/terms",
 });
 
 const SECTIONS: LegalSection[] = [
   {
-    title: "服務內容",
+    title: "網站內容",
     body: [
-      `${COMPANY_NAME_EN} 提供多項線上工具，目前可使用的是 ${QUOTE_PRODUCT.name}：一個在瀏覽器中運作的工具，協助你填寫、計算並列印報價單。目前提供免費使用，不需註冊。`,
+      `本網站由${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）經營，介紹企業 AI 本地化導入服務，並提供免費工具。網站上的服務說明、情境與流程僅供一般資訊參考，不構成報價、承諾或保證。`,
+      "實際的服務內容、範圍、費用與時程，以雙方另行簽訂的合約或確認的文件為準。",
+    ],
+  },
+  {
+    title: "免費工具",
+    body: [
+      `目前可使用的免費工具是${QUOTE_PRODUCT.name}：一個在瀏覽器中運作的工具，協助你填寫、計算並列印報價單。目前提供免費使用，不需註冊。`,
     ],
   },
   {
@@ -27,7 +34,7 @@ const SECTIONS: LegalSection[] = [
   {
     title: "資料保存",
     body: [
-      "你的資料只儲存在自己的瀏覽器。更換裝置、更換瀏覽器或清除網站資料後，資料將無法保留或復原。請自行以 PDF 等方式備份重要文件。",
+      "免費工具的資料只儲存在你自己的瀏覽器。更換裝置、更換瀏覽器或清除網站資料後，資料將無法保留或復原。請自行以 PDF 等方式備份重要文件。",
     ],
   },
   {
@@ -37,7 +44,7 @@ const SECTIONS: LegalSection[] = [
   {
     title: "免責聲明",
     body: [
-      "本服務以現狀提供，我們不保證服務不中斷或完全無誤。在法律允許的範圍內，因使用或無法使用本服務所造成的損失，我們不負賠償責任。",
+      "免費工具以現狀提供，我們不保證服務不中斷或完全無誤。在法律允許的範圍內，因使用或無法使用免費工具所造成的損失，我們不負賠償責任。",
     ],
   },
   {
@@ -47,5 +54,5 @@ const SECTIONS: LegalSection[] = [
 ];
 
 export default function TermsPage() {
-  return <LegalPage title="使用條款" intro="使用本網站前，請先閱讀以下條款。" sections={SECTIONS} />;
+  return <LegalPage title="使用條款" intro="使用本網站與免費工具前，請先閱讀以下條款。" sections={SECTIONS} />;
 }

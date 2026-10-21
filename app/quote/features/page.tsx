@@ -10,7 +10,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "功能介紹",
   description:
-    "統編驗證、國字大寫金額、含稅未稅自動計算、一鍵存 PDF、資料不上傳、手機可用——Seqlon Quote 報價單的完整功能說明。",
+    "統編驗證、國字大寫金額、含稅未稅自動計算、一鍵存 PDF、資料不上傳、手機可用——報價助手（Seqlon Quote）的完整功能說明。",
   path: "/quote/features",
 });
 

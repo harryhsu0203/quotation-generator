@@ -9,15 +9,15 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/site/Reveal";
 import SectionHeading from "@/components/site/SectionHeading";
 import { AUDIENCES, FEATURES, PAINS, STEPS } from "@/components/site/content";
 import { SITE_URL } from "@/lib/config";
-import { FAQS, HOME_FAQ_IDS } from "@/lib/faq";
+import { FAQS, QUOTE_FAQ_IDS } from "@/lib/faq";
 import { QUOTE_PRODUCT } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 const QUOTE_DESCRIPTION =
-  "Seqlon Quote 免費線上報價單：自動計算營業稅、統編檢查、國字大寫金額，手機也能用，一鍵列印或存成 PDF。資料只存在你的瀏覽器。";
+  "報價助手（Seqlon Quote）免費線上報價單：自動計算營業稅、統編檢查、國字大寫金額，手機也能用，一鍵列印或存成 PDF。資料只存在你的瀏覽器。";
 
 export const metadata: Metadata = pageMeta({
-  title: "Seqlon Quote 報價單｜免費線上報價單產生器",
+  title: "報價助手 Seqlon Quote｜免費線上報價單產生器",
   description: QUOTE_DESCRIPTION,
   path: "/quote",
   absoluteTitle: true,
@@ -26,7 +26,7 @@ export const metadata: Metadata = pageMeta({
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: `${QUOTE_PRODUCT.name} ${QUOTE_PRODUCT.nameZh}`,
+  name: `${QUOTE_PRODUCT.name} ${QUOTE_PRODUCT.nameEn}`,
   description: QUOTE_DESCRIPTION,
   url: `${SITE_URL}${QUOTE_PRODUCT.href}`,
   applicationCategory: "BusinessApplication",
@@ -37,7 +37,7 @@ const jsonLd = {
 };
 
 export default function QuoteProductPage() {
-  const homeFaqs = FAQS.filter((f) => HOME_FAQ_IDS.includes(f.id));
+  const homeFaqs = FAQS.filter((f) => QUOTE_FAQ_IDS.includes(f.id));
 
   return (
     <>

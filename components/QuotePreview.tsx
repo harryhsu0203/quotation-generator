@@ -179,7 +179,7 @@ export default function QuotePreview({ seller, quote }: Props) {
         </div>
 
         <footer className="mt-10 border-t border-line pt-3 text-center text-[10px] text-slate-400">
-          本報價單由 {QUOTE_PRODUCT.name} 免費產生
+          本報價單由 Seqlon {QUOTE_PRODUCT.name} 免費產生
         </footer>
       </div>
     </ScaledPaper>

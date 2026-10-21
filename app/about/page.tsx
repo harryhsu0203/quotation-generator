@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Eye, Lock, Sparkles } from "lucide-react";
+import { Gift, KeyRound, Wrench } from "lucide-react";
 import CtaBand from "@/components/site/CtaBand";
 import PageHero from "@/components/site/PageHero";
 import { Reveal, RevealGroup, RevealItem } from "@/components/site/Reveal";
@@ -7,33 +7,35 @@ import { COMPANY_NAME_EN, COMPANY_NAME_ZH } from "@/lib/config";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: `關於 ${COMPANY_NAME_EN}`,
-  description: `認識${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：我們為什麼做這些工具，以及對簡單、透明與隱私的堅持。`,
+  title: `關於${COMPANY_NAME_ZH}`,
+  description: `${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）專注於企業 AI 本地化：結合硬體建置、網路與資安整合、AI 模型部署，協助企業在自己的環境裡安全地使用 AI。`,
   path: "/about",
 });
 
 const VALUES = [
-  { icon: Sparkles, title: "簡單好用", text: "[在此填寫：你希望工具帶給使用者怎樣的使用感受。]" },
-  { icon: Eye, title: "透明誠實", text: "[在此填寫：你對功能描述與資訊透明的看法。]" },
-  { icon: Lock, title: "尊重隱私", text: "資料只存在使用者自己的瀏覽器，不上傳伺服器。" },
+  { icon: KeyRound, title: "資料留在自己手上", text: "AI 應該成為企業的能力，而不是把資料交出去的代價。" },
+  { icon: Wrench, title: "軟硬體一起考量", text: "從主機、網路、資安到模型與知識庫，一起規劃才能真正用得起來。" },
+  { icon: Gift, title: "持續做實用的免費工具", text: "讓更多人體驗科技帶來的效率。" },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <PageHero
-        eyebrow="ABOUT"
-        title={`關於 ${COMPANY_NAME_EN}`}
-        description={`${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：[在此填寫一句話公司介紹。]`}
-      />
+      <PageHero eyebrow="ABOUT" title={`關於${COMPANY_NAME_ZH}`} />
 
-      <section className="mx-auto w-full max-w-3xl space-y-4 px-4 py-6">
+      <section className="mx-auto w-full max-w-3xl px-4 py-4">
         <Reveal className="space-y-4 text-[15px] leading-relaxed text-slate-700">
-          <h2 className="text-xl font-bold text-ink">我們為什麼做這些工具</h2>
-          <p>[在此填寫：說明你發現了什麼問題，例如小型企業或個人工作者在日常工作中遇到的困擾。]</p>
-          <p>[在此填寫：說明你是怎麼想到用網頁工具來解決，以及希望達成的目標。]</p>
-          <h2 className="pt-2 text-xl font-bold text-ink">我們的理念</h2>
-          <p>[在此填寫：用幾句話說明品牌背後的理念與未來的方向。]</p>
+          <p>
+            {COMPANY_NAME_ZH}（{COMPANY_NAME_EN}）專注於企業 AI 本地化。我們相信，AI
+            應該成為企業的能力，而不是把資料交出去的代價。
+          </p>
+          <p>
+            我們結合硬體建置、網路與資安整合、AI
+            模型部署的實務能力，協助企業在自己的環境裡安全地使用 AI。同時，我們也持續開發實用的免費工具，讓更多人體驗科技帶來的效率。
+          </p>
+          <p className="rounded-ui border border-brand-200 bg-brand-50 p-4 text-brand-800">
+            「序」是秩序，「隆」是興隆——讓一切有序，讓事業興隆。
+          </p>
         </Reveal>
       </section>
 
@@ -52,10 +54,10 @@ export default function AboutPage() {
       </section>
 
       <CtaBand
-        title="試試 Seqlon Quote"
-        description="目前可使用的產品：免費線上報價單，免註冊、資料只存在你的瀏覽器。"
-        href="/quote"
-        label="認識 Seqlon Quote"
+        title="想知道你的公司適不適合 AI 本地化？"
+        description="先聊聊你的需求，我們幫你評估。"
+        href="/contact"
+        label="預約諮詢"
       />
     </>
   );

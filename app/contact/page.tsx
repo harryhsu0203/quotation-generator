@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Mail, MessageCircle } from "lucide-react";
+import { Check, Mail, MessageCircle } from "lucide-react";
 import ButtonLink from "@/components/site/ButtonLink";
 import PageHero from "@/components/site/PageHero";
-import { RevealGroup, RevealItem } from "@/components/site/Reveal";
+import { Reveal, RevealGroup, RevealItem } from "@/components/site/Reveal";
 import { CONTACT_EMAIL, LINE_URL, SOCIAL_LINKS, isPlaceholder } from "@/lib/config";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "聯絡方式",
-  description: "有問題或建議嗎？歡迎透過 Email 或 LINE 官方帳號聯絡我們。",
+  title: "預約諮詢",
+  description: "告訴我們你的產業與需求，序隆科技會盡快回覆。透過 Email 或 LINE 官方帳號預約 AI 本地化諮詢。",
   path: "/contact",
 });
+
+const BRIEF = ["你的產業與公司規模", "想用 AI 解決的工作或問題", "會用到哪些資料（例如合約、手冊、規章）", "預計使用的人數", "現有的網路與設備狀況（如果知道的話）"];
 
 export default function ContactPage() {
   const emailReady = !isPlaceholder(CONTACT_EMAIL);
@@ -20,8 +22,8 @@ export default function ContactPage() {
     <>
       <PageHero
         eyebrow="CONTACT"
-        title="聯絡方式"
-        description="使用上的問題、功能建議或合作想法，都歡迎來信或加入 LINE 官方帳號。"
+        title="預約諮詢"
+        description="告訴我們你的產業與需求，我們會盡快回覆。"
       />
       <section className="mx-auto w-full max-w-5xl px-4 py-6">
         <RevealGroup className="grid gap-4 md:grid-cols-2">
@@ -33,8 +35,8 @@ export default function ContactPage() {
             <p className="mt-1 break-all text-sm text-slate-600">{CONTACT_EMAIL}</p>
             {emailReady && (
               <div className="mt-4">
-                <ButtonLink href={`mailto:${CONTACT_EMAIL}`} variant="primary">
-                  寄信給我們
+                <ButtonLink href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("預約諮詢")}`} variant="primary">
+                  寄信預約
                 </ButtonLink>
               </div>
             )}
@@ -45,7 +47,7 @@ export default function ContactPage() {
               <MessageCircle className="size-5" aria-hidden />
             </span>
             <h2 className="mt-4 text-lg font-bold">LINE 官方帳號</h2>
-            <p className="mt-1 break-all text-sm text-slate-600">{lineReady ? "歡迎加入好友詢問" : LINE_URL}</p>
+            <p className="mt-1 break-all text-sm text-slate-600">{lineReady ? "歡迎加入好友，直接傳訊息給我們" : LINE_URL}</p>
             {lineReady && (
               <div className="mt-4">
                 <ButtonLink href={LINE_URL} variant="primary" external>
@@ -56,6 +58,21 @@ export default function ContactPage() {
           </RevealItem>
         </RevealGroup>
 
+        <Reveal className="mt-6">
+          <div className="rounded-[1rem] border border-brand-200 bg-brand-50 p-5">
+            <h2 className="text-base font-bold text-brand-800">聯絡時可以先告訴我們</h2>
+            <ul className="mt-3 space-y-1.5 text-sm text-slate-700">
+              {BRIEF.map((b) => (
+                <li key={b} className="flex items-start gap-2">
+                  <Check className="mt-0.5 size-4 shrink-0 text-brand-700" aria-hidden />
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-xs text-muted">不確定也沒關係，我們可以在諮詢時一起釐清。</p>
+          </div>
+        </Reveal>
+
         <div className="mt-6 text-sm text-slate-600">
           <p>回覆時間：[回覆時間說明]</p>
           {SOCIAL_LINKS.length > 0 && (
@@ -65,7 +82,7 @@ export default function ContactPage() {
                   {isPlaceholder(s.href) ? (
                     <span className="text-slate-400">{s.label}：{s.href}</span>
                   ) : (
-                    <a href={s.href} target="_blank" rel="noopener noreferrer" className="text-brand-700 hover:underline">
+                    <a href={s.href} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
                       {s.label}
                     </a>
                   )}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import {
+  BRAND_TAGLINE_EN,
   COMPANY_BLURB,
   COMPANY_NAME_EN,
   COMPANY_NAME_ZH,
@@ -10,6 +11,7 @@ import {
   isPlaceholder,
 } from "@/lib/config";
 import { PRODUCTS, isAvailable } from "@/lib/products";
+import { SERVICES } from "@/lib/services";
 
 function Col({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -45,39 +47,46 @@ export default async function SiteFooter() {
   const year = await currentYear();
   return (
     <footer className="no-print mt-8 border-t border-line bg-white pb-24 md:pb-0">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+        <div className="sm:col-span-2 lg:col-span-1">
           <Link href="/" aria-label={`${COMPANY_NAME_EN} 首頁`}>
             <Logo />
           </Link>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{COMPANY_BLURB}</p>
+          <p className="mt-3 font-display text-sm font-bold tracking-[-0.01em] text-ink">{BRAND_TAGLINE_EN}</p>
+          <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{COMPANY_BLURB}</p>
         </div>
 
-        <Col title="產品">
-          {PRODUCTS.map((p) => (
-            <li key={p.slug}>
-              {isAvailable(p) ? (
-                <Link href={p.href} className={linkCls}>
-                  {p.name}
-                  {p.nameZh ? ` ${p.nameZh}` : ""}
-                </Link>
-              ) : (
-                <span className="text-slate-400">{p.name}（即將推出）</span>
-              )}
+        <Col title="服務">
+          {SERVICES.map((s) => (
+            <li key={s.id}>
+              <Link href={`/services#${s.id}`} className={linkCls}>{s.title}</Link>
             </li>
           ))}
-          <li><Link href="/quote/templates" className={linkCls}>報價單範本</Link></li>
+        </Col>
+
+        <Col title="免費工具">
+          {PRODUCTS.map((p) => (
+            <li key={p.slug}>
+              <Link href={p.href} className={linkCls}>
+                {p.name}
+                {!isAvailable(p) && <span className="text-slate-400">（即將推出）</span>}
+              </Link>
+            </li>
+          ))}
+          <li><Link href="/tools" className={linkCls}>所有免費工具</Link></li>
         </Col>
 
         <Col title="公司">
-          <li><Link href="/about" className={linkCls}>關於 {COMPANY_NAME_EN}</Link></li>
-          <li><Link href="/contact" className={linkCls}>聯絡我們</Link></li>
+          <li><Link href="/about" className={linkCls}>關於我們</Link></li>
+          <li><Link href="/solutions" className={linkCls}>解決方案</Link></li>
+          <li><Link href="/process" className={linkCls}>導入流程</Link></li>
           <li><Link href="/faq" className={linkCls}>常見問題</Link></li>
           <li><Link href="/privacy" className={linkCls}>隱私權政策</Link></li>
           <li><Link href="/terms" className={linkCls}>使用條款</Link></li>
         </Col>
 
-        <Col title="聯絡方式">
+        <Col title="聯絡">
+          <li><Link href="/contact" className={linkCls}>預約諮詢</Link></li>
           <li><MaybeLink href={CONTACT_EMAIL} mail>{CONTACT_EMAIL}</MaybeLink></li>
           <li><MaybeLink href={LINE_URL}>LINE 官方帳號</MaybeLink></li>
           {SOCIAL_LINKS.map((s) => (
@@ -88,7 +97,7 @@ export default async function SiteFooter() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>© {year} {COMPANY_NAME_ZH} {COMPANY_NAME_EN}. All rights reserved.</span>
+          <span>© {year} {COMPANY_NAME_ZH} {COMPANY_NAME_EN}</span>
           <span className="flex gap-4">
             <Link href="/privacy" className="py-1 hover:text-brand-600">隱私權政策</Link>
             <Link href="/terms" className="py-1 hover:text-brand-600">使用條款</Link>
