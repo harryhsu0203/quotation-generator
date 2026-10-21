@@ -100,12 +100,29 @@ export function toRocDate(iso: string): RocDate | null {
   return p ? { year: p.y - 1911, month: p.m, day: p.d } : null;
 }
 
+const ZH_DIGITS = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+const ZH_MONTHS = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
+
+/** 逐位轉成國字數字，例如 115 → 「一一五」（發票期別的寫法）。 */
+export function toZhDigits(n: number): string {
+  return String(Math.abs(Math.round(n)))
+    .split("")
+    .map((d) => ZH_DIGITS[Number(d)])
+    .join("");
+}
+
 export interface InvoicePeriod {
   rocYear: number;
   /** 例如「9-10」 */
   months: string;
   /** 例如「中華民國 115 年 9-10 月份」 */
   label: string;
+  /** 國字民國年，例如「一一五」 */
+  yearZh: string;
+  /** 國字雙月，例如「九、十」「十一、十二」「一、二」 */
+  monthsZh: string;
+  /** 例如「一一五年 九、十月份」 */
+  labelZh: string;
 }
 
 /** 發票期別為雙月一期：1-2、3-4、…、11-12。 */
@@ -115,37 +132,47 @@ export function rocPeriod(iso: string): InvoicePeriod | null {
   const start = p.m % 2 === 0 ? p.m - 1 : p.m;
   const months = `${start}-${start + 1}`;
   const rocYear = p.y - 1911;
-  return { rocYear, months, label: `中華民國 ${rocYear} 年 ${months} 月份` };
+  const yearZh = toZhDigits(rocYear);
+  const monthsZh = `${ZH_MONTHS[start]}、${ZH_MONTHS[start + 1]}`;
+  return {
+    rocYear,
+    months,
+    label: `中華民國 ${rocYear} 年 ${months} 月份`,
+    yearZh,
+    monthsZh,
+    labelZh: `${yearZh}年 ${monthsZh}月份`,
+  };
 }
 
-/* ---------- 大寫金額 8 格 ---------- */
+/* ---------- 大寫金額 9 格（億～元） ---------- */
 
-export const INVOICE_CAPITAL_LABELS = ["仟萬", "佰萬", "拾萬", "萬", "仟", "佰", "拾", "元"] as const;
+export const INVOICE_CAPITAL_LABELS = ["億", "仟", "佰", "拾", "萬", "仟", "佰", "拾", "元"] as const;
 const CAPITAL_DIGITS = ["零", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖"];
-export const INVOICE_MAX_TOTAL = 99_999_999;
+export const INVOICE_CAPITAL_SLOTS = INVOICE_CAPITAL_LABELS.length;
+export const INVOICE_MAX_TOTAL = 999_999_999;
 
 export type LeadingFill = "zero" | "cross";
 
 export interface CapitalCells {
   cells: string[];
-  /** 金額超過 8 格可填寫的範圍 */
+  /** 金額超過 9 格可填寫的範圍 */
   overflow: boolean;
 }
 
 /**
- * 將總計拆成 8 格大寫數字（仟萬 … 元）。
+ * 將總計拆成 9 格大寫數字（億、仟、佰、拾、萬、仟、佰、拾、元）。
  * 最高位前面的空格依 leading 填「零」或畫「╳」；數字之間的零一律填「零」。
  */
 export function toInvoiceCapitalCells(total: number, leading: LeadingFill = "zero"): CapitalCells {
   const n = Math.round(Math.abs(total));
-  if (n > INVOICE_MAX_TOTAL) return { cells: Array(8).fill(""), overflow: true };
+  if (n > INVOICE_MAX_TOTAL) return { cells: Array(INVOICE_CAPITAL_SLOTS).fill(""), overflow: true };
 
-  const digits = String(n).padStart(8, "0").split("");
+  const digits = String(n).padStart(INVOICE_CAPITAL_SLOTS, "0").split("");
   const firstNonZero = digits.findIndex((d) => d !== "0");
   const lead = leading === "cross" ? "╳" : "零";
   const cells = digits.map((d, i) => {
     // 金額為 0 時，只有最後一格（元）填「零」
-    const isLeading = firstNonZero === -1 ? i < 7 : i < firstNonZero;
+    const isLeading = firstNonZero === -1 ? i < INVOICE_CAPITAL_SLOTS - 1 : i < firstNonZero;
     return isLeading ? lead : CAPITAL_DIGITS[Number(d)];
   });
   return { cells, overflow: false };

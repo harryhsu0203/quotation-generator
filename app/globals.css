@@ -132,15 +132,15 @@ body {
   font-weight: 500;
 }
 .inv {
-  --inv-line: #b4403f;
-  --inv-ink: #8f2d2d;
+  --inv-line: #000;
+  --inv-ink: #000;
   color: var(--inv-ink);
 }
 .inv-b {
   border: 1px solid var(--inv-line);
 }
 .inv-hl {
-  background-color: rgb(253 224 71 / 0.45) !important;
+  background-color: #fde68a !important;
   outline: 2px solid #f59e0b;
   outline-offset: -2px;
   transition: background-color 150ms ease;

@@ -12,6 +12,7 @@ import { formatNumber } from "@/lib/format";
 import {
   calcInvoiceLines,
   calcInvoiceTotals,
+  INVOICE_MAX_TOTAL,
   rocPeriod,
   sumItems,
   toInvoiceCapitalCells,
@@ -32,8 +33,8 @@ const HIGHLIGHT: Record<InputKey, CellKey[]> = {
   buyer: ["buyer"],
   taxId: ["taxId"],
   address: ["address"],
-  items: ["items", "sales", "tax", "total", "capital"],
-  basis: ["items", "sales", "tax", "total", "capital"],
+  items: ["items", "diag", "sales", "tax", "total", "capital"],
+  basis: ["items", "diag", "sales", "tax", "total", "capital"],
   category: ["tax", "sales", "total", "capital"],
   leading: ["capital"],
 };
@@ -115,14 +116,25 @@ export default function InvoiceTool() {
     const totals = calcInvoiceTotals(sumItems(src), opts);
     const lines = calcInvoiceLines(src, opts);
     const capital = toInvoiceCapitalCells(totals.total, leading);
+    const period = rocPeriod(date);
+    // 只把已填寫的品項畫到發票上；未使用的列由示意圖畫斜線
+    const items = src
+      .map((s, i) => ({
+        name: s.name,
+        quantity: mode === "lump" ? 0 : s.quantity,
+        unitPrice: mode === "lump" ? 0 : lines[i].unitPrice,
+        amount: lines[i].amount,
+      }))
+      .filter((it) => it.name.trim() !== "" || it.amount > 0);
     const data: InvoicePaperData = {
       kind,
-      period: rocPeriod(date),
+      serial: "AB",
+      periodZh: period ? { yearZh: period.yearZh, monthsZh: period.monthsZh } : null,
       roc: toRocDate(date),
       buyer,
       taxId,
       address,
-      items: src.map((s, i) => ({ name: s.name, quantity: mode === "lump" ? 0 : s.quantity, line: lines[i] })),
+      items,
       totals,
       category,
       capital,
@@ -415,12 +427,20 @@ export default function InvoiceTool() {
             </p>
 
             <ScaledPaper>
-              <InvoicePaper data={view.data} hl={hl} />
+              {/* 切換三聯式／二聯式時淡入 */}
+              <motion.div
+                key={kind}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25, ease: EASE }}
+              >
+                <InvoicePaper data={view.data} hl={hl} />
+              </motion.div>
             </ScaledPaper>
 
             {view.capital.overflow && (
               <p className="no-print mt-3 rounded-ui border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                金額超過手開發票格數（最多 99,999,999 元），大寫欄位無法填寫。
+                金額超過手開發票格數（最多 {formatNumber(INVOICE_MAX_TOTAL)} 元），大寫欄位無法填寫。
               </p>
             )}
           </div>
@@ -436,7 +456,7 @@ export default function InvoiceTool() {
                 onMouseEnter={() => setActive(null)}
                 className="avoid-break flex gap-3 rounded-ui border border-line bg-white p-3 text-sm"
               >
-                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#8f2d2d] text-xs font-bold text-white">{g.n}</span>
+                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-brand-700 text-xs font-bold text-white">{g.n}</span>
                 <span>
                   <span className="block font-bold">{g.title}</span>
                   <span className="mt-0.5 block leading-relaxed text-slate-600">{g.text}</span>

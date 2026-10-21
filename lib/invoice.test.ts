@@ -6,12 +6,23 @@ import {
   sumItems,
   toInvoiceCapitalCells,
   toRocDate,
+  toZhDigits,
 } from "./invoice";
 
 const triple = { kind: "triple", basis: "exclusive", category: "taxable" } as const;
 
 describe("calcInvoiceTotals", () => {
-  it("三聯式未稅：稅額 5%，總計 = 銷售額 + 稅額", () => {
+  it("三聯式未稅：10,000 → 稅額 500，總計 10,500", () => {
+    expect(calcInvoiceTotals(10000, triple)).toEqual({ sales: 10000, tax: 500, total: 10500 });
+  });
+  it("三聯式含稅：10,000 → 銷售額 9,524 + 稅額 476", () => {
+    expect(calcInvoiceTotals(10000, { ...triple, basis: "inclusive" })).toEqual({
+      sales: 9524,
+      tax: 476,
+      total: 10000,
+    });
+  });
+  it("三聯式未稅：稅額 = round(銷售額 × 5%)，總計 = 銷售額 + 稅額", () => {
     expect(calcInvoiceTotals(1000, triple)).toEqual({ sales: 1000, tax: 50, total: 1050 });
   });
   it("三聯式未稅：稅額 .5 四捨五入", () => {
@@ -40,6 +51,7 @@ describe("calcInvoiceTotals", () => {
     const dup = { kind: "duplicate", category: "taxable" } as const;
     expect(calcInvoiceTotals(1050, { ...dup, basis: "inclusive" }).total).toBe(1050);
     expect(calcInvoiceTotals(1000, { ...dup, basis: "exclusive" }).total).toBe(1050);
+    expect(calcInvoiceTotals(10000, { ...dup, basis: "exclusive" }).total).toBe(10500);
   });
   it("二聯式免稅：總計為輸入金額", () => {
     expect(calcInvoiceTotals(500, { kind: "duplicate", basis: "inclusive", category: "exempt" }).total).toBe(500);
@@ -74,16 +86,24 @@ describe("calcInvoiceLines", () => {
 });
 
 describe("期別與民國日期", () => {
-  it("1 月、2 月屬於 1-2 月份", () => {
+  it("1 月、2 月屬於 1-2 月份，國字為「一、二」", () => {
     expect(rocPeriod("2026-01-15")?.months).toBe("1-2");
     expect(rocPeriod("2026-02-28")?.months).toBe("1-2");
+    expect(rocPeriod("2026-01-15")?.monthsZh).toBe("一、二");
   });
-  it("12 月屬於 11-12 月份", () => {
+  it("10 月屬於 9-10 月份，國字為「九、十」", () => {
+    expect(rocPeriod("2026-10-21")?.label).toBe("中華民國 115 年 9-10 月份");
+    expect(rocPeriod("2026-10-21")?.monthsZh).toBe("九、十");
+    expect(rocPeriod("2026-10-21")?.labelZh).toBe("一一五年 九、十月份");
+    expect(rocPeriod("2026-09-10")?.months).toBe("9-10");
+  });
+  it("12 月屬於 11-12 月份，國字為「十一、十二」", () => {
     expect(rocPeriod("2026-12-31")?.label).toBe("中華民國 115 年 11-12 月份");
+    expect(rocPeriod("2026-12-31")?.monthsZh).toBe("十一、十二");
   });
-  it("9 月屬於 9-10 月份", () => {
-    expect(rocPeriod("2026-09-10")?.label).toBe("中華民國 115 年 9-10 月份");
-    expect(rocPeriod("2026-10-01")?.months).toBe("9-10");
+  it("民國年國字：115 → 一一五", () => {
+    expect(rocPeriod("2026-10-21")?.yearZh).toBe("一一五");
+    expect(toZhDigits(100)).toBe("一〇〇");
   });
   it("無效日期回傳 null", () => {
     expect(rocPeriod("")).toBeNull();
@@ -94,25 +114,29 @@ describe("期別與民國日期", () => {
   });
 });
 
-describe("toInvoiceCapitalCells", () => {
-  it("12,345 → 零 零 零 壹 貳 參 肆 伍", () => {
+describe("toInvoiceCapitalCells（億、仟、佰、拾、萬、仟、佰、拾、元，共 9 格）", () => {
+  it("12,345 → 零 零 零 零 壹 貳 參 肆 伍", () => {
     expect(toInvoiceCapitalCells(12345)).toEqual({
-      cells: ["零", "零", "零", "壹", "貳", "參", "肆", "伍"],
+      cells: ["零", "零", "零", "零", "壹", "貳", "參", "肆", "伍"],
       overflow: false,
     });
   });
+  it("共 9 格", () => {
+    expect(toInvoiceCapitalCells(1).cells).toHaveLength(9);
+  });
   it("最高位前改畫 ╳", () => {
-    expect(toInvoiceCapitalCells(12345, "cross").cells).toEqual(["╳", "╳", "╳", "壹", "貳", "參", "肆", "伍"]);
+    expect(toInvoiceCapitalCells(12345, "cross").cells).toEqual(["╳", "╳", "╳", "╳", "壹", "貳", "參", "肆", "伍"]);
   });
   it("數字之間的零仍填「零」", () => {
-    expect(toInvoiceCapitalCells(10001, "cross").cells).toEqual(["╳", "╳", "╳", "壹", "零", "零", "零", "壹"]);
-    expect(toInvoiceCapitalCells(10000).cells).toEqual(["零", "零", "零", "壹", "零", "零", "零", "零"]);
+    expect(toInvoiceCapitalCells(10001, "cross").cells).toEqual(["╳", "╳", "╳", "╳", "壹", "零", "零", "零", "壹"]);
+    expect(toInvoiceCapitalCells(10000).cells).toEqual(["零", "零", "零", "零", "壹", "零", "零", "零", "零"]);
   });
-  it("8 位數與 0", () => {
-    expect(toInvoiceCapitalCells(99999999).cells).toEqual(Array(8).fill("玖"));
-    expect(toInvoiceCapitalCells(0, "cross").cells).toEqual(["╳", "╳", "╳", "╳", "╳", "╳", "╳", "零"]);
+  it("億位數與 0", () => {
+    expect(toInvoiceCapitalCells(100000000).cells).toEqual(["壹", "零", "零", "零", "零", "零", "零", "零", "零"]);
+    expect(toInvoiceCapitalCells(999999999).cells).toEqual(Array(9).fill("玖"));
+    expect(toInvoiceCapitalCells(0, "cross").cells).toEqual(["╳", "╳", "╳", "╳", "╳", "╳", "╳", "╳", "零"]);
   });
-  it("超過 8 位數時標示 overflow", () => {
-    expect(toInvoiceCapitalCells(100000000)).toEqual({ cells: Array(8).fill(""), overflow: true });
+  it("超過 9 位數時標示 overflow", () => {
+    expect(toInvoiceCapitalCells(1000000000)).toEqual({ cells: Array(9).fill(""), overflow: true });
   });
 });
