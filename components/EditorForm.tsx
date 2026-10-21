@@ -102,7 +102,7 @@ export default function EditorForm({ seller, quote, onSellerChange, onQuoteChang
       >
         <div className={grid}>
           <Field label="公司名稱">
-            <input className="input" placeholder="例：明漢電腦工作室" value={seller.name} onChange={(e) => setSeller({ name: e.target.value })} />
+            <input className="input" placeholder="例：好日子設計工作室" value={seller.name} onChange={(e) => setSeller({ name: e.target.value })} />
           </Field>
           <Field label="統一編號" hint={taxIdHint(seller.taxId)}>
             <input className="input tabular-nums" inputMode="numeric" maxLength={8} placeholder="例：04595257" value={seller.taxId} onChange={(e) => setSeller({ taxId: e.target.value.trim() })} />
@@ -117,7 +117,7 @@ export default function EditorForm({ seller, quote, onSellerChange, onQuoteChang
             <input className="input" type="email" placeholder="例：hello@example.com" value={seller.email} onChange={(e) => setSeller({ email: e.target.value })} />
           </Field>
           <Field label="聯絡人">
-            <input className="input" placeholder="例：王小明" value={seller.contact} onChange={(e) => setSeller({ contact: e.target.value })} />
+            <input className="input" placeholder="例：業務窗口" value={seller.contact} onChange={(e) => setSeller({ contact: e.target.value })} />
           </Field>
           <div className="hidden sm:block" />
           {imageField("logo", "公司 Logo")}
@@ -140,7 +140,7 @@ export default function EditorForm({ seller, quote, onSellerChange, onQuoteChang
             <input className="input tabular-nums" inputMode="numeric" maxLength={8} placeholder="例：22099131" value={quote.customer.taxId} onChange={(e) => setCustomer({ taxId: e.target.value.trim() })} />
           </Field>
           <Field label="聯絡人">
-            <input className="input" placeholder="例：陳經理" value={quote.customer.contact} onChange={(e) => setCustomer({ contact: e.target.value })} />
+            <input className="input" placeholder="例：採購部經理" value={quote.customer.contact} onChange={(e) => setCustomer({ contact: e.target.value })} />
           </Field>
           <Field label="電話">
             <input className="input" type="tel" placeholder="例：0912-345-678" value={quote.customer.phone} onChange={(e) => setCustomer({ phone: e.target.value })} />
