@@ -31,10 +31,14 @@ export default function FaqPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <PageHero eyebrow="FAQ" title="常見問題" description="找不到答案？歡迎預約諮詢，直接詢問我們。" />
-      <section className="mx-auto w-full max-w-3xl space-y-10 px-4 py-6">
+      <section className="container-x grid items-start gap-10 py-6 lg:grid-cols-2 xl:grid-cols-3">
         <Reveal>
           <h2 className="mb-4 text-xl font-bold">AI 本地化</h2>
           <Faq items={FAQS.filter((f) => f.category === "ai")} />
+        </Reveal>
+        <Reveal>
+          <h2 className="mb-4 text-xl font-bold">軟體開發</h2>
+          <Faq items={FAQS.filter((f) => f.category === "software")} />
         </Reveal>
         <Reveal>
           <h2 className="mb-4 text-xl font-bold">免費工具</h2>

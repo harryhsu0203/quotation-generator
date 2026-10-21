@@ -8,14 +8,14 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: `關於${COMPANY_NAME_ZH}`,
-  description: `${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）專注於企業 AI 本地化：結合硬體建置、網路與資安整合、AI 模型部署，協助企業在自己的環境裡安全地使用 AI。`,
+  description: `${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）有兩大業務：AI 本地化與軟體開發。結合硬體建置、網路與資安整合、AI 模型部署與系統開發，協助企業在自己的環境裡安全地使用 AI，並讓流程自動化。`,
   path: "/about",
 });
 
 const VALUES = [
   { icon: KeyRound, title: "資料留在自己手上", text: "AI 應該成為企業的能力，而不是把資料交出去的代價。" },
-  { icon: Wrench, title: "軟硬體一起考量", text: "從主機、網路、資安到模型與知識庫，一起規劃才能真正用得起來。" },
-  { icon: Gift, title: "持續做實用的免費工具", text: "讓更多人體驗科技帶來的效率。" },
+  { icon: Wrench, title: "軟硬體一起考量", text: "從主機、網路、資安，到模型、知識庫與系統開發，一起規劃才能真正用得起來。" },
+  { icon: Gift, title: "持續做實用的免費工具", text: "把我們開發的工具免費提供出來，讓更多人體驗科技帶來的效率。" },
 ];
 
 export default function AboutPage() {
@@ -23,15 +23,14 @@ export default function AboutPage() {
     <>
       <PageHero eyebrow="ABOUT" title={`關於${COMPANY_NAME_ZH}`} />
 
-      <section className="mx-auto w-full max-w-3xl px-4 py-4">
-        <Reveal className="space-y-4 text-[15px] leading-relaxed text-slate-700">
+      <section className="container-x py-4">
+        <Reveal className="max-w-3xl space-y-4 text-[15px] leading-relaxed text-slate-700">
           <p>
-            {COMPANY_NAME_ZH}（{COMPANY_NAME_EN}）專注於企業 AI 本地化。我們相信，AI
-            應該成為企業的能力，而不是把資料交出去的代價。
+            {COMPANY_NAME_ZH}（{COMPANY_NAME_EN}）有兩大業務：AI 本地化與軟體開發。我們相信，AI
+            應該成為企業的能力，而不是把資料交出去的代價；好的系統，則應該讓流程更順暢。
           </p>
           <p>
-            我們結合硬體建置、網路與資安整合、AI
-            模型部署的實務能力，協助企業在自己的環境裡安全地使用 AI。同時，我們也持續開發實用的免費工具，讓更多人體驗科技帶來的效率。
+            我們結合硬體建置、網路與資安整合、AI 模型部署，以及系統開發與整合的實務能力，協助企業在自己的環境裡安全地使用 AI，並讓重複的流程自動化。同時，我們也持續開發實用的免費工具，讓更多人體驗科技帶來的效率。
           </p>
           <p className="rounded-ui border border-brand-200 bg-brand-50 p-4 text-brand-800">
             「序」是秩序，「隆」是興隆——讓一切有序，讓事業興隆。
@@ -39,7 +38,7 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-8">
+      <section className="container-x py-8">
         <RevealGroup className="grid gap-4 md:grid-cols-3">
           {VALUES.map(({ icon: Icon, title, text }) => (
             <RevealItem key={title} className="card p-5">

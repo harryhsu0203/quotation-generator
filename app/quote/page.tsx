@@ -47,7 +47,7 @@ export default function QuoteProductPage() {
       />
 
       {/* Hero */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-10 pt-8 md:pt-14">
+      <section className="container-x pb-10 pt-8 md:pt-14">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
           <Reveal>
             <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
@@ -84,7 +84,7 @@ export default function QuoteProductPage() {
       </section>
 
       {/* 痛點 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+      <section className="container-x py-12">
         <SectionHeading
           eyebrow="PAIN POINTS"
           title="用 Word、Excel 做報價單，是不是常遇到這些事？"
@@ -104,7 +104,7 @@ export default function QuoteProductPage() {
       </section>
 
       {/* 功能特色 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+      <section className="container-x py-12">
         <SectionHeading
           eyebrow="FEATURES"
           title="把重複又容易出錯的部分，交給工具"
@@ -130,7 +130,7 @@ export default function QuoteProductPage() {
       </section>
 
       {/* 使用步驟 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+      <section className="container-x py-12">
         <SectionHeading eyebrow="HOW IT WORKS" title="三個步驟，完成一張報價單" />
         <RevealGroup className="grid gap-4 md:grid-cols-3">
           {STEPS.map(({ icon: Icon, title, text }, i) => (
@@ -147,7 +147,7 @@ export default function QuoteProductPage() {
       </section>
 
       {/* 適用對象 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+      <section className="container-x py-12">
         <SectionHeading
           eyebrow="WHO IT'S FOR"
           title="適合需要常常報價的你"

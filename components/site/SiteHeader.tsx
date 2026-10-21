@@ -81,7 +81,7 @@ export default function SiteHeader() {
           : "border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
+      <div className="container-x flex h-14 items-center justify-between gap-4">
         <Link
           href="/"
           aria-label={`${SITE_FULL_NAME} 首頁`}

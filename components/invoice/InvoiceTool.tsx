@@ -183,7 +183,7 @@ export default function InvoiceTool() {
   return (
     <>
       <div className="no-print sticky top-14 z-30 border-b border-line bg-white/80 backdrop-blur-lg">
-        <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between gap-3 px-4">
+        <div className="container-x flex h-14 items-center justify-between gap-3">
           <h1 className="text-[15px] font-bold tracking-tight">發票助手</h1>
           <div className="flex items-center gap-2">
             <Button onClick={copyNumbers}>
@@ -200,7 +200,7 @@ export default function InvoiceTool() {
         </div>
       </div>
 
-      <main id="tool" className="mx-auto w-full max-w-[1600px] flex-1 px-4 pb-12 pt-6">
+      <main id="tool" className="container-x flex-1 pb-12 pt-6">
         <div className="no-print mb-4 flex gap-3 rounded-[1rem] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <Info className="mt-0.5 size-5 shrink-0" aria-hidden />
           <p>本工具僅協助計算與填寫參考，不會開立發票。實際開立請依財政部規定。</p>

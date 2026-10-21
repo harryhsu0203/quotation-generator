@@ -48,7 +48,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
         </ButtonLink>
       </PageHero>
 
-      <section className="mx-auto w-full max-w-5xl space-y-4 px-4 py-6">
+      <section className="container-x space-y-4 py-6">
         <Reveal className="space-y-3 text-[15px] leading-relaxed text-slate-700">
           {t.intro.map((p) => (
             <p key={p}>{p}</p>
@@ -56,7 +56,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <Reveal>
           <h2 className="text-xl font-bold">範例品項</h2>
           <p className="mt-1 text-sm text-muted">以下品項與金額僅為示意，請依實際情況調整。</p>
@@ -102,7 +102,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <Reveal>
           <div className="rounded-[1rem] border border-brand-200 bg-brand-50 p-5">
             <h2 className="flex items-center gap-2 text-base font-bold text-brand-800">
@@ -128,7 +128,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <h2 className="text-base font-bold">其他行業範本</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {others.map((o) => (

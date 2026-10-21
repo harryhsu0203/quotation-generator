@@ -8,9 +8,9 @@ import { PRODUCTS, isAvailable } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "免費工具｜報價助手、發票助手",
+  title: "我們開發的工具｜報價助手、發票助手",
   description:
-    "序隆科技打造的免費線上工具：報價助手可自動計算營業稅、統編檢查與國字大寫；發票助手提供手開統一發票的填寫參考。免費、免註冊，資料只存在你的瀏覽器。",
+    "序隆科技自行開發的免費線上工具：報價助手可自動計算營業稅、統編檢查與國字大寫；發票助手提供手開統一發票的填寫參考。免費、免註冊，資料只存在你的瀏覽器。",
   path: "/tools",
   absoluteTitle: true,
 });
@@ -19,11 +19,11 @@ export default function ToolsPage() {
   return (
     <>
       <PageHero
-        eyebrow="FREE TOOLS"
-        title="免費工具"
-        description="我們也打造實用的免費工具，體驗序隆科技的開發品質。免費、免註冊，資料只存在你的瀏覽器。"
+        eyebrow="OUR WORK"
+        title="我們開發的工具"
+        description="這些免費工具展示了我們的開發能力，你的專屬系統也能做到這樣的品質。"
       />
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <RevealGroup className="grid gap-4 sm:grid-cols-2">
           {PRODUCTS.map((p) => {
             const Icon = p.icon;
@@ -82,8 +82,8 @@ export default function ToolsPage() {
         <p className="mt-6 text-center text-sm text-muted">之後新增的免費工具，也會放在這裡。</p>
       </section>
       <CtaBand
-        title="想把 AI 導入自己的公司？"
-        description="除了免費工具，序隆科技的主要服務是企業 AI 本地化導入。"
+        title="想要一套專屬的系統或 AI？"
+        description="序隆科技的主要業務是 AI 本地化與客製化軟體開發，先聊聊你的需求。"
         href="/contact"
         label="預約諮詢"
       />

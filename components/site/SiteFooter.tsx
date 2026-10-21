@@ -11,7 +11,6 @@ import {
   isPlaceholder,
 } from "@/lib/config";
 import { PRODUCTS, isAvailable } from "@/lib/products";
-import { SERVICES } from "@/lib/services";
 
 function Col({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -47,7 +46,7 @@ export default async function SiteFooter() {
   const year = await currentYear();
   return (
     <footer className="no-print mt-8 border-t border-line bg-white pb-24 md:pb-0">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+      <div className="container-x grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
         <div className="sm:col-span-2 lg:col-span-1">
           <Link href="/" aria-label={`${COMPANY_NAME_EN} 首頁`}>
             <Logo />
@@ -57,14 +56,13 @@ export default async function SiteFooter() {
         </div>
 
         <Col title="服務">
-          {SERVICES.map((s) => (
-            <li key={s.id}>
-              <Link href={`/services#${s.id}`} className={linkCls}>{s.title}</Link>
-            </li>
-          ))}
+          <li><Link href="/services#ai" className={linkCls}>AI 本地化</Link></li>
+          <li><Link href="/services#software" className={linkCls}>軟體開發</Link></li>
+          <li><Link href="/solutions" className={linkCls}>解決方案</Link></li>
+          <li><Link href="/process" className={linkCls}>導入與開發流程</Link></li>
         </Col>
 
-        <Col title="免費工具">
+        <Col title="資源">
           {PRODUCTS.map((p) => (
             <li key={p.slug}>
               <Link href={p.href} className={linkCls}>
@@ -73,14 +71,12 @@ export default async function SiteFooter() {
               </Link>
             </li>
           ))}
-          <li><Link href="/tools" className={linkCls}>所有免費工具</Link></li>
+          <li><Link href="/tools" className={linkCls}>所有工具</Link></li>
+          <li><Link href="/faq" className={linkCls}>常見問題</Link></li>
         </Col>
 
         <Col title="公司">
           <li><Link href="/about" className={linkCls}>關於我們</Link></li>
-          <li><Link href="/solutions" className={linkCls}>解決方案</Link></li>
-          <li><Link href="/process" className={linkCls}>導入流程</Link></li>
-          <li><Link href="/faq" className={linkCls}>常見問題</Link></li>
           <li><Link href="/privacy" className={linkCls}>隱私權政策</Link></li>
           <li><Link href="/terms" className={linkCls}>使用條款</Link></li>
         </Col>
@@ -96,7 +92,7 @@ export default async function SiteFooter() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="container-x flex flex-col gap-2 py-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} {COMPANY_NAME_ZH} {COMPANY_NAME_EN}</span>
           <span className="flex gap-4">
             <Link href="/privacy" className="py-1 hover:text-brand-600">隱私權政策</Link>

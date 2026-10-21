@@ -29,7 +29,7 @@ export default function FeaturesPage() {
         description="專注把報價單做好：自動計算、格式正確、隨時可列印，並且尊重你的資料隱私。"
       />
 
-      <section className="mx-auto w-full max-w-5xl space-y-4 px-4 py-6">
+      <section className="container-x space-y-4 py-6">
         <RevealGroup className="space-y-4">
           {FEATURES.map(({ icon: Icon, title, detail, points }) => (
             <RevealItem key={title} className="card grid gap-4 p-5 sm:grid-cols-[auto_1fr] sm:gap-6 sm:p-6">
@@ -53,7 +53,7 @@ export default function FeaturesPage() {
         </RevealGroup>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-10">
+      <section className="container-x py-10">
         <SectionHeading center={false} eyebrow="TAX" title="三種稅別怎麼算" description="以下為計算規則與簡單範例。" />
         <Reveal>
           <div className="card overflow-hidden">
@@ -73,7 +73,7 @@ export default function FeaturesPage() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <Reveal>
           <div className="flex gap-3 rounded-[1rem] border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">
             <Info className="mt-0.5 size-5 shrink-0" aria-hidden />

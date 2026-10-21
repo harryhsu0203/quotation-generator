@@ -18,7 +18,7 @@ export default function ProductSubnav() {
 
   return (
     <div className="no-print border-b border-line bg-white/70 backdrop-blur">
-      <div className="mx-auto flex h-12 max-w-6xl items-center justify-between gap-3 px-4">
+      <div className="container-x flex h-12 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-1 overflow-x-auto">
           <Link href="/tools" className="mr-1 hidden whitespace-nowrap text-sm text-muted hover:text-brand-600 sm:inline">
             免費工具 /

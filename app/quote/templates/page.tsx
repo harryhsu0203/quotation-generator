@@ -23,7 +23,7 @@ export default function TemplatesPage() {
         title="報價單範本"
         description="選擇你的行業，一鍵帶入範例品項，再改成自己的內容。範本中的品項與金額僅供參考，請依實際情況調整。"
       />
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {TEMPLATES.map((t) => (
             <RevealItem key={t.slug}>

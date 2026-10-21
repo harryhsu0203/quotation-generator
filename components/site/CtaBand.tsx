@@ -14,7 +14,7 @@ export default function CtaBand({
   label?: string;
 }) {
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-12">
+    <section className="container-x py-12">
       <Reveal>
         <div className="relative overflow-hidden rounded-[1.25rem] bg-brand-800 px-6 py-10 text-center text-white md:py-14">
           <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-brand-500/30 blur-3xl" />

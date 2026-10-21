@@ -13,7 +13,7 @@ export default function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="mx-auto w-full max-w-5xl px-4 pb-6 pt-10 md:pt-14">
+    <section className="container-x pb-6 pt-10 md:pt-14">
       <Reveal>
         {eyebrow && <div className="mb-2 text-xs font-bold tracking-widest text-brand-600">{eyebrow}</div>}
         <h1 className="text-3xl font-bold leading-tight tracking-tight text-ink md:text-4xl">{title}</h1>

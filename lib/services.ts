@@ -1,4 +1,11 @@
 import {
+  Braces,
+  Boxes,
+  Globe,
+  Plug,
+  Sparkles,
+  Workflow,
+  Wrench,
   Briefcase,
   Building2,
   ClipboardList,
@@ -130,6 +137,108 @@ export const SERVICES: Service[] = [
   },
 ];
 
+/** 軟體開發服務（/services#software） */
+export const SOFTWARE_SERVICES: Service[] = [
+  {
+    id: "web",
+    icon: Globe,
+    title: "網站與 Web App",
+    summary: "企業官網、產品網站、線上工具與管理後台。",
+    details: [
+      "從企業官網、產品介紹網站，到線上工具與管理後台，我們依你的需求設計與開發，並兼顧手機與桌機的使用體驗。",
+      "也可以把既有的手動流程做成網頁工具，讓團隊透過瀏覽器就能使用。",
+    ],
+    includes: ["需求與功能規劃", "介面設計與響應式切版", "前後端開發", "管理後台", "上線部署與基本 SEO 設定"],
+  },
+  {
+    id: "internal",
+    icon: Boxes,
+    title: "企業內部系統",
+    summary: "報價、訂單、庫存、工單、客戶管理等客製化系統。",
+    details: [
+      "現成軟體不一定貼合你的作業方式。我們依你的流程，客製化報價、訂單、庫存、工單、客戶管理等內部系統。",
+      "可依需求規劃使用者角色與權限，並考慮與既有系統的資料銜接。",
+    ],
+    includes: ["流程盤點與系統規劃", "資料與功能設計", "角色與權限", "報表與匯出", "測試與上線"],
+  },
+  {
+    id: "automation",
+    icon: Workflow,
+    title: "流程自動化",
+    summary: "把重複的人工作業交給程式，例如報表產生、資料整理、通知提醒。",
+    details: [
+      "把重複、容易出錯的人工作業交給程式，例如報表產生、資料整理、通知提醒，讓同仁把時間用在更需要判斷的工作上。",
+      "我們會先盤點現有作業流程，找出適合自動化的部分，再逐步實作。",
+    ],
+    includes: ["作業流程盤點", "報表自動產生", "資料整理與轉換", "通知與提醒", "排程與執行紀錄"],
+  },
+  {
+    id: "ai-integration",
+    icon: Sparkles,
+    title: "AI 應用整合",
+    summary: "把本地 AI 接進既有系統，例如智慧客服、文件自動摘要、資料查詢。",
+    details: [
+      "結合我們的 AI 本地化能力，把本地 AI 接進你的系統或工作流程，AI 運算在你的環境內進行，資料不需要送到外部服務。",
+      "實際效果取決於任務與所選模型，我們會先以代表性任務測試，再決定整合方式。",
+    ],
+    includes: ["應用情境評估", "與既有系統串接", "智慧客服、文件摘要、資料查詢等功能規劃", "權限與資料範圍設定", "效果測試與調整"],
+  },
+  {
+    id: "integration",
+    icon: Plug,
+    title: "系統串接",
+    summary: "API 串接、資料轉換、舊系統整合。",
+    details: [
+      "不同系統之間的資料常常需要人工搬運。我們協助 API 串接、資料格式轉換與舊系統整合，讓資料自動流動。",
+      "舊系統的整合方式取決於它提供的介面與文件，評估階段會先確認可行的做法。",
+    ],
+    includes: ["系統與介面盤點", "API 串接", "資料轉換與清理", "舊系統整合", "錯誤處理與紀錄"],
+  },
+  {
+    id: "maintenance",
+    icon: Wrench,
+    title: "維護與擴充",
+    summary: "上線後的更新、修正與功能擴充。",
+    details: [
+      "系統上線後，需求常會隨著使用而改變。我們可依需求安排問題修正、系統更新與功能擴充。",
+      "也會提供使用說明與交接資料，讓你清楚系統如何運作。",
+    ],
+    includes: ["問題修正", "系統與套件更新", "功能擴充", "備份與監控建議", "使用說明與交接"],
+  },
+];
+
+export interface Business {
+  id: "ai" | "software";
+  icon: LucideIcon;
+  title: string;
+  summary: string;
+  points: string[];
+  href: string;
+  cta: string;
+}
+
+/** 序隆科技的兩大業務 */
+export const BUSINESSES: Business[] = [
+  {
+    id: "ai",
+    icon: Server,
+    title: "AI 本地化",
+    summary: "在自有主機與內網部署 AI，資料不外流。",
+    points: ["AI 主機建置", "本地模型部署", "企業知識庫", "內網資安整合"],
+    href: "/services#ai",
+    cta: "了解 AI 本地化",
+  },
+  {
+    id: "software",
+    icon: Braces,
+    title: "軟體開發",
+    summary: "依需求打造專屬系統，讓流程自動化。",
+    points: ["網站與 Web App", "企業內部系統", "流程自動化", "AI 應用整合"],
+    href: "/services#software",
+    cta: "了解軟體開發",
+  },
+];
+
 export interface Solution {
   id: string;
   icon: LucideIcon;
@@ -230,6 +339,52 @@ export const PROCESS_STEPS: ProcessStep[] = [
     title: "持續維運",
     summary: "上線後的更新、問題排除與定期檢視。",
     we: ["系統與模型更新", "問題排除與支援", "定期檢視與優化建議"],
+    you: ["回報使用上的問題與新需求"],
+  },
+];
+
+/** 軟體開發流程 */
+export const SOFTWARE_PROCESS_STEPS: ProcessStep[] = [
+  {
+    id: "sw-interview",
+    title: "需求訪談",
+    summary: "了解你想解決的問題、現有的作業流程與使用者。",
+    we: ["訪談並釐清目標與限制", "了解現有流程與使用中的工具", "確認誰會使用、怎麼使用"],
+    you: ["目前的作業方式或表單範例", "想解決的問題與期待的成果"],
+  },
+  {
+    id: "sw-planning",
+    title: "功能規劃與報價",
+    summary: "整理功能清單與優先順序，提出方案與報價。",
+    we: ["整理功能清單與優先順序", "提出建議方案與開發範圍", "依範圍提供報價與時程估計"],
+    you: ["確認功能範圍與優先順序", "預算與期望上線時間"],
+  },
+  {
+    id: "sw-design",
+    title: "介面設計",
+    summary: "先設計畫面與操作流程，確認後再開發。",
+    we: ["畫面與操作流程設計", "提供預覽供你確認", "依回饋調整"],
+    you: ["確認畫面與操作流程", "提供品牌素材（如 Logo、色彩）"],
+  },
+  {
+    id: "sw-development",
+    title: "開發與測試",
+    summary: "依確認的規劃開發，並在過程中測試與回報進度。",
+    we: ["功能開發", "測試與修正", "階段性回報進度"],
+    you: ["協助測試並回報問題", "提供必要的資料或帳號"],
+  },
+  {
+    id: "sw-deploy",
+    title: "上線部署",
+    summary: "將系統部署到正式環境，並完成交接與使用說明。",
+    we: ["正式環境部署", "資料移轉與上線檢查", "使用說明與教學"],
+    you: ["決定上線時間", "指定系統的管理窗口"],
+  },
+  {
+    id: "sw-maintenance",
+    title: "維護與擴充",
+    summary: "上線後的更新、修正與功能擴充。",
+    we: ["問題修正與系統更新", "功能擴充評估與開發", "定期檢視與優化建議"],
     you: ["回報使用上的問題與新需求"],
   },
 ];

@@ -26,7 +26,7 @@ export default function SolutionsPage() {
         description="依行業整理本地 AI 常見的應用方向：先看痛點，再看本地 AI 可以怎麼幫忙。"
       />
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-2">
+      <section className="container-x py-2">
         <Reveal>
           <div className="flex gap-3 rounded-[1rem] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
             <Info className="mt-0.5 size-5 shrink-0" aria-hidden />
@@ -35,8 +35,8 @@ export default function SolutionsPage() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
-        <RevealGroup className="space-y-4">
+      <section className="container-x py-6">
+        <RevealGroup className="grid gap-4 xl:grid-cols-2">
           {SOLUTIONS.map(({ id, icon: Icon, industry, pain, solution, uses, note }) => (
             <RevealItem key={id} className="card p-5 sm:p-6">
               <div className="flex items-center gap-3">

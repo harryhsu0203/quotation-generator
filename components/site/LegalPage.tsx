@@ -19,8 +19,8 @@ export default function LegalPage({
   return (
     <>
       <PageHero title={title} description={intro} />
-      <section className="mx-auto w-full max-w-3xl px-4 pb-12 pt-2">
-        <Reveal className="card space-y-7 p-5 sm:p-8">
+      <section className="container-x pb-12 pt-2">
+        <Reveal className="card max-w-3xl space-y-7 p-5 sm:p-8">
           {sections.map((s, i) => (
             <div key={s.title}>
               <h2 className="text-lg font-bold">

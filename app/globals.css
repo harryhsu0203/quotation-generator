@@ -97,6 +97,14 @@ body {
   }
 }
 
+/* ---- 全站容器：最大 1440px，左右內距 20–64px ---- */
+.container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4vw, 64px);
+}
+
 /* ---- 報價單主題色（由 --accent 控制）---- */
 .acc-bg {
   background-color: var(--accent);

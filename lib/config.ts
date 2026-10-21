@@ -13,18 +13,18 @@ export const SITE_NAME = COMPANY_NAME_EN;
 export const SITE_FULL_NAME = `${COMPANY_NAME_EN} ${COMPANY_NAME_ZH}`;
 
 /** 首頁 title（含關鍵字） */
-export const HOME_TITLE = `${SITE_FULL_NAME}｜企業 AI 本地化導入・地端 AI 部署`;
+export const HOME_TITLE = `${SITE_FULL_NAME}｜企業 AI 本地化・客製化軟體開發`;
 export const SITE_DESCRIPTION =
-  "協助企業將 AI 部署在自有主機與內網，從硬體規劃、本地模型到企業知識庫，資料不外流。";
+  "提供 AI 本地化部署與客製化軟體開發，從 AI 主機、企業知識庫到內部系統與流程自動化，一站完成。";
 
-export const BRAND_BADGE = "Seqlon 企業 AI 本地化";
+export const BRAND_BADGE = "Seqlon 企業 AI 與軟體開發";
 export const BRAND_SLOGAN = "AI 留在你的環境裡，資料不出門。";
 export const BRAND_SUBSLOGAN =
-  "序隆科技協助企業將 AI 部署在自有主機與內網中，從硬體規劃、模型建置到知識庫整合，一站完成。";
+  "序隆科技提供 AI 本地化部署與客製化軟體開發，從硬體、模型到系統整合，一站完成。";
 /** 頁尾標語 */
 export const BRAND_TAGLINE_EN = "Bring order to everything.";
 /** 頁尾品牌簡介 */
-export const COMPANY_BLURB = `${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：企業 AI 本地化專家，把 AI 部署在客戶自己的環境裡，資料不外流。`;
+export const COMPANY_BLURB = `${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：提供 AI 本地化部署與客製化軟體開發，把 AI 部署在客戶自己的環境裡，資料不外流。`;
 
 /** 正式網址（sitemap、Open Graph 使用）。上線前請改成實際網域。 */
 export const SITE_URL = "https://example.com";

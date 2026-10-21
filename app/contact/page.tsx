@@ -8,11 +8,11 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "預約諮詢",
-  description: "告訴我們你的產業與需求，序隆科技會盡快回覆。透過 Email 或 LINE 官方帳號預約 AI 本地化諮詢。",
+  description: "告訴我們你的產業與需求，序隆科技會盡快回覆。透過 Email 或 LINE 官方帳號預約 AI 本地化或軟體開發諮詢。",
   path: "/contact",
 });
 
-const BRIEF = ["你的產業與公司規模", "想用 AI 解決的工作或問題", "會用到哪些資料（例如合約、手冊、規章）", "預計使用的人數", "現有的網路與設備狀況（如果知道的話）"];
+const BRIEF = ["你的產業與公司規模", "想解決的問題，或想做的系統／想用 AI 處理的工作", "會用到哪些資料或現有系統（例如合約、手冊、規章、表單）", "預計使用的人數", "現有的網路、設備或系統狀況（如果知道的話）"];
 
 export default function ContactPage() {
   const emailReady = !isPlaceholder(CONTACT_EMAIL);
@@ -25,7 +25,7 @@ export default function ContactPage() {
         title="預約諮詢"
         description="告訴我們你的產業與需求，我們會盡快回覆。"
       />
-      <section className="mx-auto w-full max-w-5xl px-4 py-6">
+      <section className="container-x py-6">
         <RevealGroup className="grid gap-4 md:grid-cols-2">
           <RevealItem className="card flex flex-col p-6">
             <span className="grid size-11 place-items-center rounded-ui bg-brand-50 text-brand-700">

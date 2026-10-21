@@ -14,7 +14,7 @@ interface Props {
 export default function Toolbar({ saved, onNew, onPrint }: Props) {
   return (
     <div className="no-print sticky top-14 z-30 border-b border-line bg-white/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between gap-3 px-4">
+      <div className="container-x flex h-14 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <h1 className="text-[15px] font-bold tracking-tight">報價單工具</h1>
           <AnimatePresence>

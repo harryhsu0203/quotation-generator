@@ -141,7 +141,7 @@ export default function QuoteTool() {
     <>
       <Toolbar saved={saved} onNew={() => setConfirmNew(true)} onPrint={() => window.print()} />
 
-      <main id="tool" className="mx-auto w-full max-w-[1600px] flex-1 px-4 pb-28 pt-6 lg:pb-12">
+      <main id="tool" className="container-x flex-1 pb-28 pt-6 lg:pb-12">
         {!ready ? (
           <p className="no-print py-16 text-center text-sm text-muted">載入中…</p>
         ) : (
