@@ -57,7 +57,7 @@ export default function FormalTemplate({ seller, quote }: TemplateProps) {
         </tbody>
       </table>
 
-      <table className="mt-3 w-full border-collapse">
+      <table data-items-table className="mt-3 w-full border-collapse">
         <thead>
           <tr className="acc-tint2">
             <th className={`${cell} w-14 whitespace-nowrap text-center font-bold`}>項次</th>

@@ -50,7 +50,7 @@ export default function ClassicTemplate({ seller, quote }: TemplateProps) {
           </div>
         </div>
 
-        <table className="mt-7 w-full border-collapse text-xs">
+        <table data-items-table className="mt-7 w-full border-collapse text-xs">
           <thead>
             <tr className="acc-tint2 text-ink">
               <th className="w-9 rounded-tl-md px-2 py-2 text-center font-bold">#</th>

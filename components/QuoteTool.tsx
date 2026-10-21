@@ -8,6 +8,8 @@ import EditorForm from "@/components/EditorForm";
 import QuotePreview from "@/components/QuotePreview";
 import Toolbar from "@/components/Toolbar";
 import { EASE } from "@/components/ui";
+import { exportQuotePdf } from "@/components/quote-export/exportPdf";
+import { preparePrintPages } from "@/components/quote-export/pages";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { DEFAULT_VALID_DAYS } from "@/lib/config";
 import { DEFAULT_STYLE, normalizeStyle, type QuoteStyle } from "@/lib/quote-style";
@@ -58,6 +60,8 @@ export default function QuoteTool() {
   const [confirmNew, setConfirmNew] = useState(false);
   const [pendingTemplate, setPendingTemplate] = useState<QuoteTemplate | null>(null);
   const [saved, setSaved] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState("");
 
   const interacted = useRef(false);
   const templateHandled = useRef(false);
@@ -130,6 +134,53 @@ export default function QuoteTool() {
     setQuote(q);
   };
 
+  // 最新的內容，供列印與匯出使用
+  const latest = useRef({ seller, quote, style });
+  useEffect(() => {
+    latest.current = { seller, quote, style };
+  });
+
+  // 列印：beforeprint 時把報價單分成 A4 頁面（表頭每頁重複、不切列），afterprint 時清除
+  useEffect(() => {
+    let cleanup: (() => void) | null = null;
+    const before = () => {
+      cleanup?.();
+      try {
+        const { seller: s, quote: q, style: st } = latest.current;
+        cleanup = preparePrintPages(s, q, st);
+      } catch {
+        cleanup = null; // 失敗時退回一般的列印樣式
+      }
+    };
+    const after = () => {
+      cleanup?.();
+      cleanup = null;
+    };
+    window.addEventListener("beforeprint", before);
+    window.addEventListener("afterprint", after);
+    return () => {
+      window.removeEventListener("beforeprint", before);
+      window.removeEventListener("afterprint", after);
+      cleanup?.();
+    };
+  }, []);
+
+  const exportPdf = async () => {
+    if (exporting) return;
+    setExporting(true);
+    setExportError("");
+    try {
+      const { seller: s, quote: q, style: st } = latest.current;
+      await exportQuotePdf(s, q, st);
+    } catch (e) {
+      console.error(e);
+      setExportError("PDF 產生失敗，請再試一次，或改用「列印」另存為 PDF");
+      setTimeout(() => setExportError(""), 6000);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const startNew = () => {
     interacted.current = true;
     setQuote(freshQuote());
@@ -139,7 +190,14 @@ export default function QuoteTool() {
 
   return (
     <>
-      <Toolbar saved={saved} onNew={() => setConfirmNew(true)} onPrint={() => window.print()} />
+      <Toolbar
+        saved={saved}
+        exporting={exporting}
+        exportError={exportError}
+        onNew={() => setConfirmNew(true)}
+        onPrint={() => window.print()}
+        onExport={exportPdf}
+      />
 
       <main id="tool" className="container-x flex-1 pb-28 pt-6 lg:pb-12">
         {!ready ? (

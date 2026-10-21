@@ -18,10 +18,10 @@ export default function MinimalTemplate({ seller, quote }: TemplateProps) {
   const { totals, showTax, capital } = quoteView(quote);
 
   return (
-    <div className="paper-inner min-h-[1080px] p-16 text-[12px] leading-relaxed text-neutral-900">
+    <div className="paper-inner min-h-[1080px] p-12 text-[12px] leading-snug text-neutral-900">
       <header className="flex items-start justify-between gap-8 border-b border-neutral-900 pb-6">
         <div className="min-w-0">
-          <SellerLogo seller={seller} className="mb-3 h-10 max-w-[7rem]" />
+          <SellerLogo seller={seller} className="mb-2 h-9 max-w-[7rem]" />
           <div className="text-[15px] font-medium tracking-wide">{seller.name || "（我方公司名稱）"}</div>
           <div className="mt-1 space-y-0.5 text-[11px] text-neutral-500">
             {seller.taxId && <div>統編 {seller.taxId}</div>}
@@ -54,7 +54,7 @@ export default function MinimalTemplate({ seller, quote }: TemplateProps) {
         </div>
       </div>
 
-      <table className="mt-7 w-full border-collapse text-[11px]">
+      <table data-items-table className="mt-5 w-full border-collapse text-[11px]">
         <thead>
           <tr className="border-b border-neutral-900 text-left text-[9px] uppercase tracking-[0.2em] text-neutral-500">
             <th className="w-8 py-2 font-normal">#</th>
@@ -69,13 +69,13 @@ export default function MinimalTemplate({ seller, quote }: TemplateProps) {
         <tbody>
           {quote.items.map((it, i) => (
             <tr key={it.id} className="border-b border-neutral-200">
-              <td className="py-3 text-neutral-400">{i + 1}</td>
-              <td className="py-3 font-medium">{it.name}</td>
-              <td className="py-3 text-neutral-600">{it.spec}</td>
-              <td className="py-3 text-center tabular-nums">{it.quantity}</td>
-              <td className="py-3 text-center">{it.unit}</td>
-              <td className="py-3 text-right tabular-nums">{formatNumber(it.unitPrice)}</td>
-              <td className="py-3 text-right tabular-nums">{formatNumber(itemAmount(it))}</td>
+              <td className="py-2.5 text-neutral-400">{i + 1}</td>
+              <td className="py-2.5 font-medium">{it.name}</td>
+              <td className="py-2.5 text-neutral-600">{it.spec}</td>
+              <td className="py-2.5 text-center tabular-nums">{it.quantity}</td>
+              <td className="py-2.5 text-center">{it.unit}</td>
+              <td className="py-2.5 text-right tabular-nums">{formatNumber(it.unitPrice)}</td>
+              <td className="py-2.5 text-right tabular-nums">{formatNumber(itemAmount(it))}</td>
             </tr>
           ))}
           {quote.items.length === 0 && (

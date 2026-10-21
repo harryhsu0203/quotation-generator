@@ -52,7 +52,7 @@ export default function ModernTemplate({ seller, quote }: TemplateProps) {
       </div>
       {seller.address && <div className="mt-2 text-[11px] text-slate-500">公司地址：{seller.address}</div>}
 
-      <table className="mt-6 w-full border-collapse text-xs">
+      <table data-items-table className="mt-6 w-full border-collapse text-xs">
         <thead>
           <tr className="acc-border border-b-2 text-left">
             <th className="acc-text w-9 px-2 py-2 text-center font-bold">#</th>

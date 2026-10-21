@@ -39,7 +39,7 @@ const VARIANTS: Record<Variant, string> = {
 };
 
 export function buttonClass(variant: Variant = "secondary"): string {
-  return `inline-flex min-h-11 items-center justify-center gap-2 rounded-ui px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:cursor-not-allowed disabled:opacity-40 md:min-h-10 ${VARIANTS[variant]}`;
+  return `inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-ui px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:cursor-not-allowed disabled:opacity-40 md:min-h-10 ${VARIANTS[variant]}`;
 }
 
 export function Button({

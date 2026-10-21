@@ -147,9 +147,20 @@ body {
 }
 
 /* ---- 列印 ---- */
+/* 其他頁面（發票助手等）維持 12mm 邊界；報價單列印使用具名頁面，邊界為 0（自帶內距，瀏覽器也就不會印出網址與日期） */
 @page {
   size: A4;
   margin: 12mm;
+}
+
+@page quote-pages {
+  size: A4;
+  margin: 0;
+}
+
+/* 列印用的分頁容器：畫面上不顯示，只在 beforeprint 期間存在 */
+#print-root {
+  display: none;
 }
 
 @media print {
@@ -204,8 +215,29 @@ body {
     display: block !important;
   }
 
-  /* 滿版色帶：螢幕上出血到紙張邊緣，列印時回到可列印範圍 */
-  .bleed {
+  /* 報價單列印：只顯示分頁後的 A4 頁面（#print-root），隱藏其他所有內容 */
+  body.has-print-pages > *:not(#print-root) {
+    display: none !important;
+  }
+
+  body.has-print-pages #print-root {
+    display: block !important;
+    page: quote-pages;
+  }
+
+  #print-root,
+  #print-root * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #print-root > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 滿版色帶（一般列印的退路）：回到可列印範圍 */
+  body:not(.has-print-pages) .bleed {
     margin-left: 0 !important;
     margin-right: 0 !important;
     margin-top: 0 !important;
@@ -232,7 +264,7 @@ body {
     overflow: visible !important;
   }
 
-  .paper-inner {
+  body:not(.has-print-pages) .paper-inner {
     padding: 0 !important;
     min-height: 0 !important;
   }
