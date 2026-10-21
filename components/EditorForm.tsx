@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
+import { Building2, ImagePlus, ListChecks, NotebookText, Receipt, UserRound, X } from "lucide-react";
 import ItemsTable from "./ItemsTable";
+import { Field, Section, staggerParent } from "./ui";
 import { fileToCompressedDataUrl } from "@/lib/image";
 import { isValidTaxId } from "@/lib/tax-id";
 import type { TaxMode } from "@/lib/tax";
@@ -12,39 +15,6 @@ interface Props {
   quote: Quote;
   onSellerChange: (s: Seller) => void;
   onQuoteChange: (q: Quote) => void;
-  onNewQuote: () => void;
-}
-
-const input =
-  "mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <h2 className="mb-3 text-base font-semibold">{title}</h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{children}</div>
-    </section>
-  );
-}
-
-function Field({
-  label,
-  children,
-  full,
-  hint,
-}: {
-  label: string;
-  children: React.ReactNode;
-  full?: boolean;
-  hint?: string;
-}) {
-  return (
-    <label className={`block text-sm text-gray-700 ${full ? "sm:col-span-2" : ""}`}>
-      {label}
-      {children}
-      {hint && <span className="mt-1 block text-xs text-amber-600">{hint}</span>}
-    </label>
-  );
 }
 
 function taxIdHint(id: string): string | undefined {
@@ -54,20 +24,16 @@ function taxIdHint(id: string): string | undefined {
   return undefined;
 }
 
-const TAX_OPTIONS: { value: TaxMode; label: string }[] = [
-  { value: "exclusive", label: "未稅（外加 5%）" },
-  { value: "inclusive", label: "含稅（內含 5%）" },
-  { value: "none", label: "免稅" },
+const TAX_OPTIONS: { value: TaxMode; label: string; note: string }[] = [
+  { value: "exclusive", label: "未稅", note: "外加 5%" },
+  { value: "inclusive", label: "含稅", note: "內含 5%" },
+  { value: "none", label: "免稅", note: "不計營業稅" },
 ];
 
-export default function EditorForm({
-  seller,
-  quote,
-  onSellerChange,
-  onQuoteChange,
-  onNewQuote,
-}: Props) {
+export default function EditorForm({ seller, quote, onSellerChange, onQuoteChange }: Props) {
   const [imgError, setImgError] = useState("");
+  // 我方資訊已填過就預設收合（掛載時 seller 已從 localStorage 載入）
+  const [sellerFilled] = useState(() => seller.name.trim() !== "");
 
   const setSeller = (patch: Partial<Seller>) => onSellerChange({ ...seller, ...patch });
   const setQuote = (patch: Partial<Quote>) => onQuoteChange({ ...quote, ...patch });
@@ -85,123 +51,166 @@ export default function EditorForm({
   };
 
   const imageField = (key: "logo" | "stamp", label: string) => (
-    <Field label={label}>
-      <input
-        type="file"
-        accept="image/*"
-        className="mt-1 block w-full text-sm file:mr-3 file:rounded file:border-0 file:bg-gray-100 file:px-3 file:py-2"
-        onChange={(e) => {
-          upload(e.target.files?.[0], key);
-          e.target.value = "";
-        }}
-      />
-      {seller[key] && (
-        <span className="mt-2 flex items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={seller[key]} alt={label} className="h-12 max-w-[8rem] object-contain" />
-          <button type="button" className="text-xs text-red-600 underline" onClick={() => setSeller({ [key]: "" })}>
-            移除
-          </button>
-        </span>
-      )}
-    </Field>
+    <div>
+      <span className="label">{label}</span>
+      <div className="mt-1.5 flex items-center gap-3">
+        <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-ui border border-dashed border-slate-300 bg-slate-50 px-3 text-sm text-slate-600 transition-colors hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 md:min-h-10">
+          <ImagePlus className="size-4" aria-hidden />
+          {seller[key] ? "更換圖片" : "上傳圖片"}
+          <input
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(e) => {
+              upload(e.target.files?.[0], key);
+              e.target.value = "";
+            }}
+          />
+        </label>
+        {seller[key] && (
+          <span className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={seller[key]} alt={label} className="h-10 max-w-[6rem] rounded border border-line bg-white object-contain p-0.5" />
+            <button
+              type="button"
+              aria-label={`移除${label}`}
+              onClick={() => setSeller({ [key]: "" })}
+              className="grid size-8 place-items-center rounded-full text-slate-500 hover:bg-red-50 hover:text-red-600"
+            >
+              <X className="size-4" />
+            </button>
+          </span>
+        )}
+      </div>
+    </div>
   );
 
-  const sellerHint = taxIdHint(seller.taxId);
-  const customerHint = taxIdHint(quote.customer.taxId);
+  const sellerSummary = seller.name
+    ? `${seller.name}${seller.taxId ? `　統編 ${seller.taxId}` : ""}`
+    : undefined;
+  const customerSummary = quote.customer.name || undefined;
+  const grid = "grid grid-cols-1 gap-4 sm:grid-cols-2";
 
   return (
-    <div className="space-y-4">
-      <Section title="我方資訊（會自動記住）">
-        <Field label="公司名稱">
-          <input className={input} value={seller.name} onChange={(e) => setSeller({ name: e.target.value })} />
-        </Field>
-        <Field label="統一編號" hint={sellerHint}>
-          <input className={input} inputMode="numeric" maxLength={8} value={seller.taxId} onChange={(e) => setSeller({ taxId: e.target.value.trim() })} />
-        </Field>
-        <Field label="地址" full>
-          <input className={input} value={seller.address} onChange={(e) => setSeller({ address: e.target.value })} />
-        </Field>
-        <Field label="電話">
-          <input className={input} type="tel" value={seller.phone} onChange={(e) => setSeller({ phone: e.target.value })} />
-        </Field>
-        <Field label="Email">
-          <input className={input} type="email" value={seller.email} onChange={(e) => setSeller({ email: e.target.value })} />
-        </Field>
-        <Field label="聯絡人">
-          <input className={input} value={seller.contact} onChange={(e) => setSeller({ contact: e.target.value })} />
-        </Field>
-        <div className="hidden sm:block" />
-        {imageField("logo", "公司 Logo")}
-        {imageField("stamp", "印章圖")}
-        {imgError && <p className="text-sm text-red-600 sm:col-span-2">{imgError}</p>}
-      </Section>
-
-      <Section title="客戶資訊">
-        <Field label="公司名稱">
-          <input className={input} value={quote.customer.name} onChange={(e) => setCustomer({ name: e.target.value })} />
-        </Field>
-        <Field label="統一編號" hint={customerHint}>
-          <input className={input} inputMode="numeric" maxLength={8} value={quote.customer.taxId} onChange={(e) => setCustomer({ taxId: e.target.value.trim() })} />
-        </Field>
-        <Field label="聯絡人">
-          <input className={input} value={quote.customer.contact} onChange={(e) => setCustomer({ contact: e.target.value })} />
-        </Field>
-        <Field label="電話">
-          <input className={input} type="tel" value={quote.customer.phone} onChange={(e) => setCustomer({ phone: e.target.value })} />
-        </Field>
-        <Field label="地址" full>
-          <input className={input} value={quote.customer.address} onChange={(e) => setCustomer({ address: e.target.value })} />
-        </Field>
-      </Section>
-
-      <Section title="報價資訊">
-        <Field label="報價單號（自動產生）">
-          <input className={input} value={quote.number} onChange={(e) => setQuote({ number: e.target.value })} />
-        </Field>
-        <div className="hidden sm:block" />
-        <Field label="報價日期">
-          <input className={input} type="date" value={quote.date} onChange={(e) => setQuote({ date: e.target.value })} />
-        </Field>
-        <Field label="有效期限">
-          <input className={input} type="date" value={quote.validUntil} onChange={(e) => setQuote({ validUntil: e.target.value })} />
-        </Field>
-      </Section>
-
-      <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-base font-semibold">報價品項</h2>
-        <ItemsTable items={quote.items} onChange={(items) => setQuote({ items })} />
-      </section>
-
-      <Section title="稅別">
-        <div className="flex flex-wrap gap-4 sm:col-span-2">
-          {TAX_OPTIONS.map((o) => (
-            <label key={o.value} className="flex items-center gap-2 text-sm">
-              <input type="radio" name="taxMode" checked={quote.taxMode === o.value} onChange={() => setQuote({ taxMode: o.value })} />
-              {o.label}
-            </label>
-          ))}
+    <motion.div variants={staggerParent} initial="hidden" animate="show" className="space-y-4">
+      <Section
+        icon={Building2}
+        title="我方資訊"
+        description="只需填一次，下次開啟會自動帶入"
+        summary={sellerSummary}
+        defaultOpen={!sellerFilled}
+      >
+        <div className={grid}>
+          <Field label="公司名稱">
+            <input className="input" placeholder="例：明漢電腦工作室" value={seller.name} onChange={(e) => setSeller({ name: e.target.value })} />
+          </Field>
+          <Field label="統一編號" hint={taxIdHint(seller.taxId)}>
+            <input className="input tabular-nums" inputMode="numeric" maxLength={8} placeholder="例：04595257" value={seller.taxId} onChange={(e) => setSeller({ taxId: e.target.value.trim() })} />
+          </Field>
+          <Field label="地址" full>
+            <input className="input" placeholder="例：台北市中正區重慶南路一段 122 號" value={seller.address} onChange={(e) => setSeller({ address: e.target.value })} />
+          </Field>
+          <Field label="電話">
+            <input className="input" type="tel" placeholder="例：02-2345-6789" value={seller.phone} onChange={(e) => setSeller({ phone: e.target.value })} />
+          </Field>
+          <Field label="Email">
+            <input className="input" type="email" placeholder="例：hello@example.com" value={seller.email} onChange={(e) => setSeller({ email: e.target.value })} />
+          </Field>
+          <Field label="聯絡人">
+            <input className="input" placeholder="例：王小明" value={seller.contact} onChange={(e) => setSeller({ contact: e.target.value })} />
+          </Field>
+          <div className="hidden sm:block" />
+          {imageField("logo", "公司 Logo")}
+          {imageField("stamp", "印章圖")}
+          {imgError && <p className="text-sm text-red-600 sm:col-span-2">{imgError}</p>}
         </div>
       </Section>
 
-      <Section title="備註與付款條件">
-        <Field label="備註" full>
-          <textarea className={input} rows={3} value={quote.notes} onChange={(e) => setQuote({ notes: e.target.value })} />
-        </Field>
-        <Field label="付款條件" full>
-          <textarea className={input} rows={3} value={quote.paymentTerms} onChange={(e) => setQuote({ paymentTerms: e.target.value })} />
-        </Field>
+      <Section
+        icon={UserRound}
+        title="客戶資訊"
+        description="報價對象的公司與聯絡方式"
+        summary={customerSummary}
+      >
+        <div className={grid}>
+          <Field label="公司名稱">
+            <input className="input" placeholder="例：大安股份有限公司" value={quote.customer.name} onChange={(e) => setCustomer({ name: e.target.value })} />
+          </Field>
+          <Field label="統一編號" hint={taxIdHint(quote.customer.taxId)}>
+            <input className="input tabular-nums" inputMode="numeric" maxLength={8} placeholder="例：22099131" value={quote.customer.taxId} onChange={(e) => setCustomer({ taxId: e.target.value.trim() })} />
+          </Field>
+          <Field label="聯絡人">
+            <input className="input" placeholder="例：陳經理" value={quote.customer.contact} onChange={(e) => setCustomer({ contact: e.target.value })} />
+          </Field>
+          <Field label="電話">
+            <input className="input" type="tel" placeholder="例：0912-345-678" value={quote.customer.phone} onChange={(e) => setCustomer({ phone: e.target.value })} />
+          </Field>
+          <Field label="地址" full>
+            <input className="input" placeholder="例：台北市大安區忠孝東路四段 1 號" value={quote.customer.address} onChange={(e) => setCustomer({ address: e.target.value })} />
+          </Field>
+        </div>
       </Section>
 
-      <button
-        type="button"
-        onClick={() => {
-          if (window.confirm("要清除目前內容並建立新的報價單嗎？（我方資訊會保留）")) onNewQuote();
-        }}
-        className="rounded border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      <Section
+        icon={ListChecks}
+        title="報價品項"
+        description="品名、數量與單價，可調整順序"
+        summary={`${quote.items.length} 個品項`}
       >
-        新增空白報價單
-      </button>
-    </div>
+        <ItemsTable items={quote.items} onChange={(items) => setQuote({ items })} />
+      </Section>
+
+      <Section
+        icon={Receipt}
+        title="報價資訊"
+        description="單號、日期與稅別"
+        summary={`${quote.number}　${TAX_OPTIONS.find((o) => o.value === quote.taxMode)?.label}`}
+      >
+        <div className={grid}>
+          <Field label="報價單號（自動產生）" full>
+            <input className="input tabular-nums" value={quote.number} onChange={(e) => setQuote({ number: e.target.value })} />
+          </Field>
+          <Field label="報價日期">
+            <input className="input" type="date" value={quote.date} onChange={(e) => setQuote({ date: e.target.value })} />
+          </Field>
+          <Field label="有效期限">
+            <input className="input" type="date" value={quote.validUntil} onChange={(e) => setQuote({ validUntil: e.target.value })} />
+          </Field>
+          <fieldset className="sm:col-span-2">
+            <legend className="label">稅別</legend>
+            <div className="mt-1.5 grid grid-cols-3 gap-2">
+              {TAX_OPTIONS.map((o) => {
+                const active = quote.taxMode === o.value;
+                return (
+                  <label
+                    key={o.value}
+                    className={`relative flex min-h-14 cursor-pointer flex-col items-center justify-center rounded-ui border px-2 py-2 text-center transition-colors focus-within:ring-4 focus-within:ring-brand-500/20 ${
+                      active ? "border-brand-600 bg-brand-50 text-brand-800" : "border-line bg-white hover:border-slate-300"
+                    }`}
+                  >
+                    <input type="radio" name="taxMode" className="sr-only" checked={active} onChange={() => setQuote({ taxMode: o.value })} />
+                    <span className="text-sm font-bold">{o.label}</span>
+                    <span className="text-xs text-muted">{o.note}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+        </div>
+      </Section>
+
+      <Section icon={NotebookText} title="備註與付款條件" description="會顯示在報價單下方" defaultOpen={false}
+        summary={quote.paymentTerms || quote.notes || undefined}
+      >
+        <div className="grid grid-cols-1 gap-4">
+          <Field label="付款條件">
+            <textarea className="input" rows={3} placeholder={"例：簽約後付 50%，完成驗收後付尾款 50%"} value={quote.paymentTerms} onChange={(e) => setQuote({ paymentTerms: e.target.value })} />
+          </Field>
+          <Field label="備註">
+            <textarea className="input" rows={3} placeholder="例：本報價不含網域與主機費用" value={quote.notes} onChange={(e) => setQuote({ notes: e.target.value })} />
+          </Field>
+        </div>
+      </Section>
+    </motion.div>
   );
 }

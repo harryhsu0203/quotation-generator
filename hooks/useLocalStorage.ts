@@ -11,6 +11,7 @@ import { readJSON, writeJSON } from "@/lib/storage";
 export function useLocalStorage<T>(key: string, initial: T, debounceMs = 400) {
   const [value, setValue] = useState<T>(initial);
   const [ready, setReady] = useState(false);
+  const [savedAt, setSavedAt] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -23,7 +24,9 @@ export function useLocalStorage<T>(key: string, initial: T, debounceMs = 400) {
   useEffect(() => {
     if (!ready) return;
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => writeJSON(key, value), debounceMs);
+    timer.current = setTimeout(() => {
+      if (writeJSON(key, value)) setSavedAt(Date.now());
+    }, debounceMs);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
@@ -31,5 +34,5 @@ export function useLocalStorage<T>(key: string, initial: T, debounceMs = 400) {
 
   const reset = useCallback((next: T) => setValue(next), []);
 
-  return [value, setValue, { ready, reset }] as const;
+  return [value, setValue, { ready, reset, savedAt }] as const;
 }

@@ -1,34 +1,101 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f3f4f6;
-  --foreground: #171717;
+/* ---- 色票（深藍主色）---- */
+@theme {
+  --color-brand-50: #eef4fc;
+  --color-brand-100: #dbe8fa;
+  --color-brand-200: #bad2f3;
+  --color-brand-500: #2f6fcb;
+  --color-brand-600: #1f56a8;
+  --color-brand-700: #17407f;
+  --color-brand-800: #112f5d;
+  --color-brand-900: #0b2145;
+
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-line: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-canvas: #f5f7fb;
+
+  --radius-ui: 0.625rem;
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.05);
+  --shadow-paper: 0 2px 4px rgb(15 23 42 / 0.06), 0 16px 48px rgb(15 23 42 / 0.12);
+  --font-sans: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui,
+    sans-serif;
+}
+
+html {
+  scroll-padding-top: 4.5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+  background-image:
+    radial-gradient(900px 420px at 85% -10%, rgb(47 111 203 / 0.12), transparent 70%),
+    radial-gradient(700px 360px at -5% 0%, rgb(17 47 93 / 0.08), transparent 70%),
+    linear-gradient(rgb(15 23 42 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(15 23 42 / 0.035) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    32px 32px,
+    32px 32px;
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-attachment: scroll;
+  -webkit-font-smoothing: antialiased;
 }
 
-.btn-icon {
-  min-width: 2rem;
-  height: 2rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  background: #fff;
-  font-size: 0.875rem;
-}
-.btn-icon:disabled {
-  opacity: 0.35;
-}
-.btn-icon:not(:disabled):hover {
-  background: #f3f4f6;
+/* ---- 共用元件樣式 ---- */
+@layer components {
+  .input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+  @media (min-width: 768px) {
+    .input {
+      min-height: 2.5rem;
+      font-size: 0.875rem;
+    }
+  }
+  .input::placeholder {
+    color: #94a3b8;
+  }
+  .input:hover {
+    border-color: #cbd5e1;
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--color-brand-500);
+    box-shadow: 0 0 0 4px rgb(47 111 203 / 0.18);
+  }
+
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #334155;
+  }
 }
 
-/* ---- 列印：只顯示報價單 ---- */
+/* ---- 列印 ---- */
 @page {
   size: A4;
   margin: 12mm;
@@ -38,6 +105,15 @@ body {
   html,
   body {
     background: #fff !important;
+    background-image: none !important;
+  }
+
+  /* 停用所有動畫與過渡，避免殘影 */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 
   .no-print {
@@ -47,17 +123,53 @@ body {
   /* 預覽區在列印時一律顯示（即使手機停在「編輯」分頁） */
   .print-area {
     display: block !important;
+    position: static !important;
     width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  #tool {
     max-width: none !important;
     margin: 0 !important;
     padding: 0 !important;
+  }
+
+  #tool > div {
+    display: block !important;
+  }
+
+  .paper-clip {
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .paper-wrap {
+    height: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .paper-sheet {
+    width: 100% !important;
+    transform: none !important;
     box-shadow: none !important;
-    border: 0 !important;
+    border-radius: 0 !important;
     min-height: 0 !important;
   }
 
-  .quote-sheet {
-    transform: none !important;
+  .paper-inner {
+    padding: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .paper-sheet,
+  .paper-sheet * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   tr,

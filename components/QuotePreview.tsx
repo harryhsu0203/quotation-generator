@@ -1,3 +1,5 @@
+import { CountUp } from "./ui";
+import ScaledPaper from "./ScaledPaper";
 import { SITE_NAME } from "@/lib/config";
 import { toChineseAmount } from "@/lib/chinese-amount";
 import { formatNTD, formatNumber } from "@/lib/format";
@@ -15,12 +17,12 @@ const TAX_LABEL = {
   none: "免稅",
 } as const;
 
-function Line({ label, value }: { label: string; value?: string }) {
+function Row({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
-    <div>
-      <span className="text-gray-500">{label}：</span>
-      {value}
+    <div className="flex gap-2">
+      <span className="w-12 shrink-0 text-slate-400">{label}</span>
+      <span className="min-w-0 break-words">{value}</span>
     </div>
   );
 }
@@ -30,128 +32,156 @@ export default function QuotePreview({ seller, quote }: Props) {
   const showTax = quote.taxMode !== "none";
 
   return (
-    <div className="quote-sheet mx-auto w-full max-w-[210mm] bg-white p-[8mm] text-[13px] leading-relaxed text-black shadow sm:p-[12mm] md:min-h-[297mm]">
-      <header className="flex items-start justify-between gap-4 border-b-2 border-gray-800 pb-3">
-        <div className="flex items-center gap-3">
-          {seller.logo && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={seller.logo} alt="Logo" className="h-14 max-w-[8rem] object-contain" />
-          )}
-          <div>
-            <div className="text-lg font-bold">{seller.name || "（我方公司名稱）"}</div>
-            <Line label="統編" value={seller.taxId} />
+    <ScaledPaper>
+      <div className="h-2.5 bg-brand-700" />
+      <div className="paper-inner min-h-[1080px] p-12 text-[13px] leading-relaxed text-slate-800">
+        {/* 標題區 */}
+        <header className="flex items-start justify-between gap-6">
+          <div className="flex min-w-0 items-center gap-4">
+            {seller.logo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={seller.logo} alt="Logo" className="h-16 max-w-[9rem] object-contain" />
+            )}
+            <div className="min-w-0 space-y-0.5 text-xs">
+              <div className="text-base font-bold text-ink">{seller.name || "（我方公司名稱）"}</div>
+              <Row label="統編" value={seller.taxId} />
+              <Row label="電話" value={seller.phone} />
+              <Row label="Email" value={seller.email} />
+              <Row label="地址" value={seller.address} />
+            </div>
+          </div>
+          <div className="shrink-0 text-right">
+            <h1 className="text-[32px] font-bold leading-none tracking-[0.25em] text-brand-700">報價單</h1>
+            <div className="mt-1.5 text-[11px] font-medium tracking-[0.4em] text-slate-400">QUOTATION</div>
+          </div>
+        </header>
+
+        {/* 客戶與單據資訊 */}
+        <div className="mt-8 grid grid-cols-[1.3fr_1fr] gap-4">
+          <div className="rounded-lg border border-line p-4">
+            <div className="mb-2 text-[11px] font-bold tracking-widest text-brand-700">客戶 BILL TO</div>
+            <div className="mb-1 text-sm font-bold text-ink">{quote.customer.name || "（客戶名稱）"}</div>
+            <div className="space-y-0.5 text-xs">
+              <Row label="統編" value={quote.customer.taxId} />
+              <Row label="聯絡人" value={quote.customer.contact} />
+              <Row label="電話" value={quote.customer.phone} />
+              <Row label="地址" value={quote.customer.address} />
+            </div>
+          </div>
+          <div className="rounded-lg bg-brand-50 p-4">
+            <div className="mb-2 text-[11px] font-bold tracking-widest text-brand-700">單據 DETAILS</div>
+            <div className="space-y-1 text-xs">
+              <Row label="單號" value={quote.number} />
+              <Row label="日期" value={quote.date} />
+              <Row label="有效至" value={quote.validUntil} />
+              <Row label="報價人" value={seller.contact} />
+            </div>
           </div>
         </div>
-        <h1 className="text-2xl font-bold tracking-widest">報價單</h1>
-      </header>
 
-      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-0.5">
-          <div className="font-semibold">客戶資料</div>
-          <div>{quote.customer.name || "（客戶名稱）"}</div>
-          <Line label="統編" value={quote.customer.taxId} />
-          <Line label="聯絡人" value={quote.customer.contact} />
-          <Line label="電話" value={quote.customer.phone} />
-          <Line label="地址" value={quote.customer.address} />
-        </div>
-        <div className="space-y-0.5 sm:text-right">
-          <Line label="報價單號" value={quote.number} />
-          <Line label="報價日期" value={quote.date} />
-          <Line label="有效期限" value={quote.validUntil} />
-          <Line label="報價人" value={seller.contact} />
-          <Line label="電話" value={seller.phone} />
-          <Line label="Email" value={seller.email} />
-          <Line label="地址" value={seller.address} />
-        </div>
-      </div>
-
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full border-collapse text-[12px]">
+        {/* 品項 */}
+        <table className="mt-7 w-full border-collapse text-xs">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-400 px-2 py-1 w-8">#</th>
-              <th className="border border-gray-400 px-2 py-1 text-left">品名</th>
-              <th className="border border-gray-400 px-2 py-1 text-left">規格</th>
-              <th className="border border-gray-400 px-2 py-1">數量</th>
-              <th className="border border-gray-400 px-2 py-1">單位</th>
-              <th className="border border-gray-400 px-2 py-1 text-right">單價</th>
-              <th className="border border-gray-400 px-2 py-1 text-right">小計</th>
+            <tr className="bg-brand-100 text-brand-900">
+              <th className="w-9 rounded-tl-md px-2 py-2 text-center font-bold">#</th>
+              <th className="px-2 py-2 text-left font-bold">品名</th>
+              <th className="px-2 py-2 text-left font-bold">規格</th>
+              <th className="w-14 px-2 py-2 text-center font-bold">數量</th>
+              <th className="w-12 px-2 py-2 text-center font-bold">單位</th>
+              <th className="w-24 px-2 py-2 text-right font-bold">單價</th>
+              <th className="w-28 rounded-tr-md px-2 py-2 text-right font-bold">小計</th>
             </tr>
           </thead>
           <tbody>
             {quote.items.map((it, i) => (
-              <tr key={it.id}>
-                <td className="border border-gray-400 px-2 py-1 text-center">{i + 1}</td>
-                <td className="border border-gray-400 px-2 py-1">{it.name}</td>
-                <td className="border border-gray-400 px-2 py-1">{it.spec}</td>
-                <td className="border border-gray-400 px-2 py-1 text-center">{it.quantity}</td>
-                <td className="border border-gray-400 px-2 py-1 text-center">{it.unit}</td>
-                <td className="border border-gray-400 px-2 py-1 text-right tabular-nums">{formatNumber(it.unitPrice)}</td>
-                <td className="border border-gray-400 px-2 py-1 text-right tabular-nums">{formatNumber(itemAmount(it))}</td>
+              <tr key={it.id} className={i % 2 === 1 ? "bg-slate-50" : ""}>
+                <td className="px-2 py-2 text-center text-slate-400">{i + 1}</td>
+                <td className="px-2 py-2 font-medium text-ink">{it.name}</td>
+                <td className="px-2 py-2 text-slate-600">{it.spec}</td>
+                <td className="px-2 py-2 text-center tabular-nums">{it.quantity}</td>
+                <td className="px-2 py-2 text-center">{it.unit}</td>
+                <td className="px-2 py-2 text-right tabular-nums">{formatNumber(it.unitPrice)}</td>
+                <td className="px-2 py-2 text-right font-medium tabular-nums">{formatNumber(itemAmount(it))}</td>
               </tr>
             ))}
+            {quote.items.length === 0 && (
+              <tr>
+                <td colSpan={7} className="px-2 py-6 text-center text-slate-400">
+                  尚無品項
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-      </div>
+        <div className="h-px bg-line" />
 
-      <div className="avoid-break mt-3 flex flex-col gap-3 sm:flex-row sm:justify-between">
-        <div className="text-[12px] text-gray-600">稅別：{TAX_LABEL[quote.taxMode]}</div>
-        <dl className="w-full space-y-1 sm:w-64">
-          {showTax && (
-            <>
-              <div className="flex justify-between">
-                <dt>未稅金額</dt>
-                <dd className="tabular-nums">{formatNTD(totals.subtotal)}</dd>
+        {/* 合計 */}
+        <div className="avoid-break mt-5 flex items-start justify-between gap-6">
+          <div className="pt-1 text-xs text-slate-500">稅別：{TAX_LABEL[quote.taxMode]}</div>
+          <div className="w-72 overflow-hidden rounded-lg border border-line">
+            {showTax && (
+              <div className="space-y-1.5 px-4 py-3 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">未稅金額</span>
+                  <CountUp value={totals.subtotal} format={formatNTD} className="tabular-nums" />
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">營業稅（5%）</span>
+                  <CountUp value={totals.tax} format={formatNTD} className="tabular-nums" />
+                </div>
               </div>
-              <div className="flex justify-between">
-                <dt>營業稅（5%）</dt>
-                <dd className="tabular-nums">{formatNTD(totals.tax)}</dd>
-              </div>
-            </>
-          )}
-          <div className="flex justify-between border-t border-gray-800 pt-1 text-base font-bold">
-            <dt>總計</dt>
-            <dd className="tabular-nums">{formatNTD(totals.total)}</dd>
+            )}
+            <div className="flex items-center justify-between bg-brand-700 px-4 py-3 text-white">
+              <span className="text-sm font-bold">總計</span>
+              <CountUp value={totals.total} format={formatNTD} className="text-xl font-bold tabular-nums" />
+            </div>
           </div>
-        </dl>
-      </div>
-
-      <div className="avoid-break mt-2 border border-gray-400 px-3 py-2">
-        <span className="text-gray-500">總計（大寫）：</span>
-        <span className="font-semibold">{toChineseAmount(totals.total)}</span>
-      </div>
-
-      {(quote.notes || quote.paymentTerms) && (
-        <div className="avoid-break mt-4 space-y-3">
-          {quote.paymentTerms && (
-            <div>
-              <div className="font-semibold">付款條件</div>
-              <div className="whitespace-pre-wrap">{quote.paymentTerms}</div>
-            </div>
-          )}
-          {quote.notes && (
-            <div>
-              <div className="font-semibold">備註</div>
-              <div className="whitespace-pre-wrap">{quote.notes}</div>
-            </div>
-          )}
         </div>
-      )}
 
-      <div className="avoid-break mt-8 flex items-end justify-between gap-4">
-        <div className="w-40 border-t border-gray-500 pt-1 text-center text-[12px] text-gray-600">客戶確認簽章</div>
-        <div className="flex h-24 w-40 flex-col items-center justify-end">
-          {seller.stamp && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={seller.stamp} alt="印章" className="max-h-20 max-w-full object-contain" />
-          )}
-          <div className="mt-1 w-full border-t border-gray-500 pt-1 text-center text-[12px] text-gray-600">報價單位簽章</div>
+        <div className="avoid-break mt-3 flex items-center gap-3 rounded-lg bg-brand-50 px-4 py-3">
+          <span className="text-[11px] font-bold tracking-widest text-brand-700">大寫金額</span>
+          <span className="text-sm font-bold text-brand-900">{toChineseAmount(totals.total)}</span>
         </div>
-      </div>
 
-      <footer className="mt-8 text-center text-[10px] text-gray-400">
-        本報價單由 {SITE_NAME} 免費產生
-      </footer>
-    </div>
+        {/* 備註 */}
+        {(quote.paymentTerms || quote.notes) && (
+          <div className="avoid-break mt-6 grid grid-cols-2 gap-6 text-xs">
+            {quote.paymentTerms && (
+              <div>
+                <div className="mb-1 text-[11px] font-bold tracking-widest text-brand-700">付款條件</div>
+                <div className="whitespace-pre-wrap">{quote.paymentTerms}</div>
+              </div>
+            )}
+            {quote.notes && (
+              <div>
+                <div className="mb-1 text-[11px] font-bold tracking-widest text-brand-700">備註</div>
+                <div className="whitespace-pre-wrap">{quote.notes}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 簽章 */}
+        <div className="avoid-break mt-12 grid grid-cols-2 gap-10">
+          <div>
+            <div className="h-20" />
+            <div className="border-t border-slate-300 pt-1 text-center text-[11px] text-slate-500">客戶確認簽章</div>
+          </div>
+          <div>
+            <div className="flex h-20 items-end justify-center">
+              {seller.stamp && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={seller.stamp} alt="印章" className="max-h-20 max-w-full object-contain" />
+              )}
+            </div>
+            <div className="border-t border-slate-300 pt-1 text-center text-[11px] text-slate-500">報價單位簽章</div>
+          </div>
+        </div>
+
+        <footer className="mt-10 border-t border-line pt-3 text-center text-[10px] text-slate-400">
+          本報價單由 {SITE_NAME} 免費產生
+        </footer>
+      </div>
+    </ScaledPaper>
   );
 }

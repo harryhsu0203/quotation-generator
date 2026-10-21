@@ -1,5 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
+import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { Button, EASE, IconButton } from "./ui";
 import { formatNumber } from "@/lib/format";
 import { itemAmount } from "@/lib/tax";
 import { newItem, type Item } from "@/lib/types";
@@ -9,8 +12,9 @@ interface Props {
   onChange: (items: Item[]) => void;
 }
 
-const input =
-  "w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
+/** 手機：6 欄卡片；桌機：單列 12 欄 */
+const GRID = "grid grid-cols-6 gap-x-2 gap-y-2 md:grid-cols-[minmax(0,3fr)_minmax(0,2.5fr)_4.5rem_4rem_6rem_5.5rem_auto] md:items-center";
+const HEAD = "text-xs font-medium text-muted";
 
 export default function ItemsTable({ items, onChange }: Props) {
   const update = (id: string, patch: Partial<Item>) =>
@@ -25,89 +29,87 @@ export default function ItemsTable({ items, onChange }: Props) {
   };
   const num = (v: string) => (v === "" ? 0 : Math.max(0, Number(v) || 0));
 
-  const actions = (it: Item, i: number) => (
-    <div className="flex gap-1">
-      <button type="button" aria-label="上移" disabled={i === 0} onClick={() => move(i, -1)} className="btn-icon">
-        ↑
-      </button>
-      <button type="button" aria-label="下移" disabled={i === items.length - 1} onClick={() => move(i, 1)} className="btn-icon">
-        ↓
-      </button>
-      <button type="button" aria-label="刪除" onClick={() => remove(it.id)} className="btn-icon text-red-600">
-        ✕
-      </button>
-    </div>
-  );
-
   return (
     <div>
-      {/* 桌機：表格 */}
-      <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-600">
-              <th className="p-1 font-medium">品名</th>
-              <th className="p-1 font-medium">規格</th>
-              <th className="p-1 w-20 font-medium">數量</th>
-              <th className="p-1 w-16 font-medium">單位</th>
-              <th className="p-1 w-28 font-medium">單價</th>
-              <th className="p-1 w-24 text-right font-medium">小計</th>
-              <th className="p-1 w-28" />
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((it, i) => (
-              <tr key={it.id}>
-                <td className="p-1"><input className={input} value={it.name} onChange={(e) => update(it.id, { name: e.target.value })} /></td>
-                <td className="p-1"><input className={input} value={it.spec} onChange={(e) => update(it.id, { spec: e.target.value })} /></td>
-                <td className="p-1"><input className={input} type="number" inputMode="decimal" min={0} value={it.quantity} onChange={(e) => update(it.id, { quantity: num(e.target.value) })} /></td>
-                <td className="p-1"><input className={input} value={it.unit} onChange={(e) => update(it.id, { unit: e.target.value })} /></td>
-                <td className="p-1"><input className={input} type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={(e) => update(it.id, { unitPrice: num(e.target.value) })} /></td>
-                <td className="p-1 text-right tabular-nums">{formatNumber(itemAmount(it))}</td>
-                <td className="p-1">{actions(it, i)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className={`${GRID} mb-2 hidden px-1 md:grid`}>
+        <span className={HEAD}>品名</span>
+        <span className={HEAD}>規格</span>
+        <span className={HEAD}>數量</span>
+        <span className={HEAD}>單位</span>
+        <span className={HEAD}>單價</span>
+        <span className={`${HEAD} text-right`}>小計</span>
+        <span className="w-[7.5rem]" />
       </div>
 
-      {/* 手機：卡片 */}
-      <div className="md:hidden space-y-3">
-        {items.map((it, i) => (
-          <div key={it.id} className="rounded-lg border border-gray-200 bg-gray-50 p-3 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">品項 {i + 1}</span>
-              {actions(it, i)}
-            </div>
-            <label className="block text-xs text-gray-600">品名
-              <input className={input} value={it.name} onChange={(e) => update(it.id, { name: e.target.value })} />
-            </label>
-            <label className="block text-xs text-gray-600">規格
-              <input className={input} value={it.spec} onChange={(e) => update(it.id, { spec: e.target.value })} />
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              <label className="block text-xs text-gray-600">數量
-                <input className={input} type="number" inputMode="decimal" min={0} value={it.quantity} onChange={(e) => update(it.id, { quantity: num(e.target.value) })} />
-              </label>
-              <label className="block text-xs text-gray-600">單位
-                <input className={input} value={it.unit} onChange={(e) => update(it.id, { unit: e.target.value })} />
-              </label>
-              <label className="block text-xs text-gray-600">單價
-                <input className={input} type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={(e) => update(it.id, { unitPrice: num(e.target.value) })} />
-              </label>
-            </div>
-            <div className="text-right text-sm">小計：<span className="font-medium tabular-nums">NT$ {formatNumber(itemAmount(it))}</span></div>
-          </div>
-        ))}
+      <div>
+        <AnimatePresence initial={false}>
+          {items.map((it, i) => (
+            <motion.div
+              key={it.id}
+              layout="position"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="p-1 pb-3">
+                <div className="rounded-ui border border-line bg-slate-50/60 p-3 md:border-0 md:bg-transparent md:p-0">
+                  <div className={GRID}>
+                    <div className="col-span-6 flex items-center justify-between md:hidden">
+                      <span className="text-xs font-bold text-brand-700">品項 {i + 1}</span>
+                    </div>
+                    <label className="col-span-6 md:col-span-1">
+                      <span className={`${HEAD} md:sr-only`}>品名</span>
+                      <input className="input" placeholder="例：網站設計" value={it.name} onChange={(e) => update(it.id, { name: e.target.value })} />
+                    </label>
+                    <label className="col-span-6 md:col-span-1">
+                      <span className={`${HEAD} md:sr-only`}>規格</span>
+                      <input className="input" placeholder="例：RWD 五頁式" value={it.spec} onChange={(e) => update(it.id, { spec: e.target.value })} />
+                    </label>
+                    <label className="col-span-2 md:col-span-1">
+                      <span className={`${HEAD} md:sr-only`}>數量</span>
+                      <input className="input tabular-nums" type="number" inputMode="decimal" min={0} value={it.quantity} onChange={(e) => update(it.id, { quantity: num(e.target.value) })} />
+                    </label>
+                    <label className="col-span-2 md:col-span-1">
+                      <span className={`${HEAD} md:sr-only`}>單位</span>
+                      <input className="input" placeholder="式" value={it.unit} onChange={(e) => update(it.id, { unit: e.target.value })} />
+                    </label>
+                    <label className="col-span-2 md:col-span-1">
+                      <span className={`${HEAD} md:sr-only`}>單價</span>
+                      <input className="input tabular-nums" type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={(e) => update(it.id, { unitPrice: num(e.target.value) })} />
+                    </label>
+                    <div className="col-span-3 text-sm md:col-span-1 md:text-right">
+                      <span className="text-muted md:hidden">小計 </span>
+                      <span className="font-bold tabular-nums">{formatNumber(itemAmount(it))}</span>
+                    </div>
+                    <div className="col-span-3 flex justify-end gap-1.5 md:col-span-1">
+                      <IconButton label="上移" disabled={i === 0} onClick={() => move(i, -1)}>
+                        <ArrowUp className="size-4" />
+                      </IconButton>
+                      <IconButton label="下移" disabled={i === items.length - 1} onClick={() => move(i, 1)}>
+                        <ArrowDown className="size-4" />
+                      </IconButton>
+                      <IconButton label="刪除" className="text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => remove(it.id)}>
+                        <Trash2 className="size-4" />
+                      </IconButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
-      <button
-        type="button"
-        onClick={() => onChange([...items, newItem()])}
-        className="mt-3 rounded border border-dashed border-gray-400 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-      >
-        ＋ 新增品項
-      </button>
+      {items.length === 0 && (
+        <p className="py-6 text-center text-sm text-muted">還沒有品項，點下方按鈕新增第一筆。</p>
+      )}
+
+      <Button variant="primary" className="mt-1 w-full sm:w-auto" onClick={() => onChange([...items, newItem()])}>
+        <Plus className="size-4" aria-hidden />
+        新增品項
+      </Button>
     </div>
   );
 }
