@@ -10,7 +10,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "免費工具｜報價助手、發票助手",
   description:
-    "序隆科技打造的免費線上工具：報價助手可自動計算營業稅、統編檢查與國字大寫；發票助手開發中。免費、免註冊，資料只存在你的瀏覽器。",
+    "序隆科技打造的免費線上工具：報價助手可自動計算營業稅、統編檢查與國字大寫；發票助手提供手開統一發票的填寫參考。免費、免註冊，資料只存在你的瀏覽器。",
   path: "/tools",
   absoluteTitle: true,
 });

@@ -97,6 +97,47 @@ body {
   }
 }
 
+/* ---- 報價單主題色（由 --accent 控制）---- */
+.acc-bg {
+  background-color: var(--accent);
+}
+.acc-text {
+  color: var(--accent);
+}
+.acc-border {
+  border-color: var(--accent);
+}
+.acc-tint {
+  background-color: color-mix(in srgb, var(--accent) 8%, white);
+}
+.acc-tint2 {
+  background-color: color-mix(in srgb, var(--accent) 16%, white);
+}
+.acc-ink {
+  color: color-mix(in srgb, var(--accent) 60%, black);
+}
+
+/* ---- 手開發票示意圖 ---- */
+.hand {
+  font-family: "LXGW WenKai TC", "DFKai-SB", "BiauKai", "KaiTi", "標楷體", serif;
+  color: #1d3f9e;
+  font-weight: 500;
+}
+.inv {
+  --inv-line: #b4403f;
+  --inv-ink: #8f2d2d;
+  color: var(--inv-ink);
+}
+.inv-b {
+  border: 1px solid var(--inv-line);
+}
+.inv-hl {
+  background-color: rgb(253 224 71 / 0.45) !important;
+  outline: 2px solid #f59e0b;
+  outline-offset: -2px;
+  transition: background-color 150ms ease;
+}
+
 /* ---- 列印 ---- */
 @page {
   size: A4;
@@ -139,8 +180,27 @@ body {
     padding: 0 !important;
   }
 
-  #tool > div {
+  #tool > div:not(.no-print) {
     display: block !important;
+  }
+
+  /* 發票助手：逐格說明另起一頁，方便與示意圖對照 */
+  .print-guide {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* flex 版面在 Chrome 列印時可能影響跨頁，列印時改為一般區塊 */
+  body,
+  body > div {
+    display: block !important;
+  }
+
+  /* 滿版色帶：螢幕上出血到紙張邊緣，列印時回到可列印範圍 */
+  .bleed {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
   }
 
   .paper-clip {
@@ -161,6 +221,7 @@ body {
     box-shadow: none !important;
     border-radius: 0 !important;
     min-height: 0 !important;
+    overflow: visible !important;
   }
 
   .paper-inner {

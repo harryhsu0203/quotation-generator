@@ -10,8 +10,9 @@ import Toolbar from "@/components/Toolbar";
 import { EASE } from "@/components/ui";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { DEFAULT_VALID_DAYS } from "@/lib/config";
+import { DEFAULT_STYLE, normalizeStyle, type QuoteStyle } from "@/lib/quote-style";
 import { nextQuoteNumber } from "@/lib/quote-number";
-import { DRAFT_KEY, SELLER_KEY, getStore } from "@/lib/storage";
+import { DRAFT_KEY, SELLER_KEY, STYLE_KEY, getStore } from "@/lib/storage";
 import { getTemplate, type QuoteTemplate } from "@/lib/templates";
 import {
   addDays,
@@ -51,6 +52,8 @@ type Tab = "edit" | "preview";
 export default function QuoteTool() {
   const [seller, setSeller, sellerState] = useLocalStorage(SELLER_KEY, emptySeller);
   const [quote, setQuote, draftState] = useLocalStorage<Quote>(DRAFT_KEY, blankQuote);
+  const [rawStyle, setStyle, styleState] = useLocalStorage<QuoteStyle>(STYLE_KEY, DEFAULT_STYLE);
+  const style = normalizeStyle(rawStyle);
   const [tab, setTab] = useState<Tab>("edit");
   const [confirmNew, setConfirmNew] = useState(false);
   const [pendingTemplate, setPendingTemplate] = useState<QuoteTemplate | null>(null);
@@ -62,8 +65,8 @@ export default function QuoteTool() {
   const editCtl = useAnimationControls();
   const previewCtl = useAnimationControls();
 
-  const ready = sellerState.ready && draftState.ready;
-  const savedAt = Math.max(sellerState.savedAt, draftState.savedAt);
+  const ready = sellerState.ready && draftState.ready && styleState.ready;
+  const savedAt = Math.max(sellerState.savedAt, draftState.savedAt, styleState.savedAt);
 
   // 沒有草稿時，載入後自動產生單號、日期與一列空白品項
   useEffect(() => {
@@ -118,6 +121,10 @@ export default function QuoteTool() {
     interacted.current = true;
     setSeller(s);
   };
+  const changeStyle = (s: QuoteStyle) => {
+    interacted.current = true;
+    setStyle(s);
+  };
   const changeQuote = (q: Quote) => {
     interacted.current = true;
     setQuote(q);
@@ -146,15 +153,17 @@ export default function QuoteTool() {
               <EditorForm
                 seller={seller}
                 quote={quote}
+                style={style}
                 onSellerChange={changeSeller}
                 onQuoteChange={changeQuote}
+                onStyleChange={changeStyle}
               />
             </motion.div>
             <motion.div
               animate={previewCtl}
               className={`print-area ${tab === "preview" ? "block" : "hidden"} lg:sticky lg:top-[7.5rem] lg:block lg:self-start`}
             >
-              <QuotePreview seller={seller} quote={quote} />
+              <QuotePreview seller={seller} quote={quote} style={style} />
             </motion.div>
           </div>
         )}

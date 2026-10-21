@@ -30,7 +30,7 @@ export default function ScaledPaper({ children }: { children: React.ReactNode })
 
   // 外層裁掉縮放前的排版寬度（避免手機橫向捲動），並以 padding 保留陰影空間
   return (
-    <div className="paper-clip -mx-8 -mb-10 overflow-hidden px-8 pb-10">
+    <div className="paper-clip -mx-4 -mb-10 overflow-hidden px-4 pb-10">
       <div
         ref={wrap}
         className="paper-wrap mx-auto w-full"

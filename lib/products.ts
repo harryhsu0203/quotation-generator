@@ -36,10 +36,11 @@ export const PRODUCTS: Product[] = [
     slug: "invoice",
     name: "發票助手",
     nameEn: "Seqlon Invoice",
-    description: "協助整理與製作發票相關文件的免費工具，開發中。",
+    description: "手開統一發票填寫參考：即時看到三聯式、二聯式的填寫示意圖，自動計算稅額與大寫金額。不會開立發票。",
     icon: Receipt,
     href: "/invoice",
-    status: "coming-soon",
+    appHref: "/invoice",
+    status: "available",
   },
 ];
 

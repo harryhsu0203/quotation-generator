@@ -2,13 +2,14 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/config";
 import { TEMPLATES } from "@/lib/templates";
 
-// /invoice 為「即將推出」佔位頁（noindex），不放入 sitemap
+// 工具頁
 const STATIC_PATHS = [
   "/",
   "/services",
   "/solutions",
   "/process",
   "/tools",
+  "/invoice",
   "/quote",
   "/quote/app",
   "/quote/features",

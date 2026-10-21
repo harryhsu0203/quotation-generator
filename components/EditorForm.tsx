@@ -2,19 +2,23 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Building2, ImagePlus, ListChecks, NotebookText, Receipt, UserRound, X } from "lucide-react";
+import { Building2, ImagePlus, LayoutTemplate, ListChecks, NotebookText, Receipt, UserRound, X } from "lucide-react";
 import ItemsTable from "./ItemsTable";
+import LayoutPicker from "./LayoutPicker";
 import { Field, Section, staggerParent } from "./ui";
 import { fileToCompressedDataUrl } from "@/lib/image";
 import { isValidTaxId } from "@/lib/tax-id";
 import type { TaxMode } from "@/lib/tax";
+import { LAYOUTS, type QuoteStyle } from "@/lib/quote-style";
 import type { Party, Quote, Seller } from "@/lib/types";
 
 interface Props {
   seller: Seller;
   quote: Quote;
+  style: QuoteStyle;
   onSellerChange: (s: Seller) => void;
   onQuoteChange: (q: Quote) => void;
+  onStyleChange: (s: QuoteStyle) => void;
 }
 
 function taxIdHint(id: string): string | undefined {
@@ -30,7 +34,7 @@ const TAX_OPTIONS: { value: TaxMode; label: string; note: string }[] = [
   { value: "none", label: "免稅", note: "不計營業稅" },
 ];
 
-export default function EditorForm({ seller, quote, onSellerChange, onQuoteChange }: Props) {
+export default function EditorForm({ seller, quote, style, onSellerChange, onQuoteChange, onStyleChange }: Props) {
   const [imgError, setImgError] = useState("");
   // 我方資訊已填過就預設收合（掛載時 seller 已從 localStorage 載入）
   const [sellerFilled] = useState(() => seller.name.trim() !== "");
@@ -93,6 +97,15 @@ export default function EditorForm({ seller, quote, onSellerChange, onQuoteChang
 
   return (
     <motion.div variants={staggerParent} initial="hidden" animate="show" className="space-y-4">
+      <Section
+        icon={LayoutTemplate}
+        title="版面與主題色"
+        description="選擇報價單的樣式，預覽會即時切換"
+        summary={`${LAYOUTS.find((l) => l.id === style.layout)?.name}版面`}
+      >
+        <LayoutPicker style={style} onChange={onStyleChange} />
+      </Section>
+
       <Section
         icon={Building2}
         title="我方資訊"

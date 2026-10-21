@@ -1,5 +1,6 @@
 export const SELLER_KEY = "quote:seller";
 export const DRAFT_KEY = "quote:draft";
+export const STYLE_KEY = "quote:style";
 
 export function readJSON<T>(key: string, fallback: T): T {
   try {
