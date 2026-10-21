@@ -146,6 +146,19 @@ body {
   transition: background-color 150ms ease;
 }
 
+/* 示意圖浮水印：半透明斜向文字鋪滿整張 */
+.inv-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 150 100)' font-family='sans-serif' font-size='26' font-weight='700' fill='rgba(30,41,59,0.13)'%3E示意範例 僅供參考%3C/text%3E%3C/svg%3E");
+  background-size: 300px 200px;
+}
+.print-only {
+  display: none;
+}
+
 /* ---- 列印 ---- */
 /* 其他頁面（發票助手等）維持 12mm 邊界；報價單列印使用具名頁面，邊界為 0（自帶內距，瀏覽器也就不會印出網址與日期） */
 @page {
@@ -180,6 +193,10 @@ body {
 
   .no-print {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 
   /* 預覽區在列印時一律顯示（即使手機停在「編輯」分頁） */

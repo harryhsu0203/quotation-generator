@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, Copy, Info, Plus, Printer, Trash2 } from "lucide-react";
+import { Check, Copy, Info, Plus, Stamp, Trash2 } from "lucide-react";
 import InvoicePaper, { type CellKey, type InvoicePaperData } from "./InvoicePaper";
 import { GUIDE } from "./guide";
 import ScaledPaper from "@/components/ScaledPaper";
@@ -198,15 +198,10 @@ export default function InvoiceTool() {
         <div className="container-x flex h-14 items-center justify-between gap-3">
           <h1 className="text-[15px] font-bold tracking-tight">發票助手</h1>
           <div className="flex items-center gap-2">
-            <Button onClick={copyNumbers}>
+            <Button variant="primary" onClick={copyNumbers}>
               {copied ? <Check className="size-4 text-emerald-600" aria-hidden /> : <Copy className="size-4" aria-hidden />}
               <span className="hidden sm:inline">{copied ? "已複製" : "複製數字"}</span>
               <span className="sr-only sm:hidden">{copied ? "已複製" : "複製數字"}</span>
-            </Button>
-            <Button variant="primary" onClick={() => window.print()}>
-              <Printer className="size-4" aria-hidden />
-              <span className="hidden sm:inline">列印示意圖</span>
-              <span className="sr-only sm:hidden">列印示意圖</span>
             </Button>
           </div>
         </div>
@@ -215,10 +210,10 @@ export default function InvoiceTool() {
       <main id="tool" className="container-x flex-1 pb-12 pt-6">
         <div className="no-print mb-4 flex gap-3 rounded-[1rem] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <Info className="mt-0.5 size-5 shrink-0" aria-hidden />
-          <p>本工具僅協助計算與填寫參考，不會開立發票。實際開立請依財政部規定。</p>
+          <p>本工具僅示範手開發票的填寫方式與金額計算，不會也無法開立發票。</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <div className="no-print grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           {/* ---- 輸入區 ---- */}
           <div className="no-print space-y-4">
             <section className="card space-y-4 p-4 sm:p-5">
@@ -368,7 +363,7 @@ export default function InvoiceTool() {
           </div>
 
           {/* ---- 示意圖 ---- */}
-          <div className="print-area lg:sticky lg:top-[7.5rem] lg:self-start">
+          <div className="lg:sticky lg:top-[7.5rem] lg:self-start">
             <div className="no-print mb-3 flex flex-wrap items-center justify-between gap-3">
               <div role="tablist" aria-label="發票種類" className="relative inline-flex rounded-ui bg-slate-100 p-1">
                 {(
@@ -426,6 +421,12 @@ export default function InvoiceTool() {
               大寫空格的實務作法依各地國稅局或會計師建議。
             </p>
 
+            <div
+              className="select-none"
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
+              onCopy={(e) => e.preventDefault()}
+            >
             <ScaledPaper>
               {/* 切換三聯式／二聯式時淡入 */}
               <motion.div
@@ -437,6 +438,15 @@ export default function InvoiceTool() {
                 <InvoicePaper data={view.data} hl={hl} />
               </motion.div>
             </ScaledPaper>
+            </div>
+
+            <div className="mt-3 flex gap-3 rounded-ui border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+              <Stamp className="mt-0.5 size-5 shrink-0" aria-hidden />
+              <p>
+                <span className="font-bold">別忘了蓋發票章：</span>
+                手開發票填寫完成後，須由營業人在右下角「營業人蓋用統一發票專用章」欄蓋上統一發票專用章才算完成，本示意圖不含印章。
+              </p>
+            </div>
 
             {view.capital.overflow && (
               <p className="no-print mt-3 rounded-ui border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -446,8 +456,8 @@ export default function InvoiceTool() {
           </div>
         </div>
 
-        {/* ---- 逐格說明（列印時一併輸出，方便對照手寫）---- */}
-        <section className="print-guide mt-8 max-w-4xl">
+        {/* ---- 逐格說明 ---- */}
+        <section className="no-print mt-8 max-w-4xl">
           <h2 className="text-lg font-bold">每一格怎麼填（{kind === "triple" ? "三聯式" : "二聯式"}）</h2>
           <ol className="mt-3 grid gap-2 sm:grid-cols-2">
             {guide.map((g) => (
@@ -464,8 +474,10 @@ export default function InvoiceTool() {
               </li>
             ))}
           </ol>
-          <p className="mt-4 text-xs text-muted">本工具僅協助計算與填寫參考，不會開立發票。實際開立請依財政部規定。</p>
+          <p className="mt-4 text-xs text-muted">本工具僅示範手開發票的填寫方式與金額計算，不會也無法開立發票。</p>
         </section>
+
+        <p className="print-only text-center text-base">發票示意圖僅供線上參考，不提供列印</p>
       </main>
     </>
   );

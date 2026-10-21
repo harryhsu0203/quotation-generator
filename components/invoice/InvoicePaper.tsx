@@ -213,7 +213,8 @@ export default function InvoicePaper({ data, hl }: { data: InvoicePaperData; hl:
   const baseN = triple ? { diag: 8, sales: 9, tax: 10, total: 11, capital: 12, stamp: 13 } : { diag: 7, total: 8, capital: 9, tax: 10, stamp: 11 };
 
   return (
-    <div className="paper-inner inv p-10 text-[12.5px] font-bold text-black">
+    <div className="paper-inner inv relative p-10 text-[12.5px] font-bold text-black">
+      <div className="inv-watermark" aria-hidden />
       {/* ---- 上方：字軌、標題、期別、買受人、統編／日期、地址 ---- */}
       <div className="grid grid-cols-[4.5rem_1fr_4.5rem] items-center">
         <Hl k="serial" hl={hl} className="w-fit">
@@ -328,6 +329,7 @@ export default function InvoicePaper({ data, hl }: { data: InvoicePaperData; hl:
           <span className="mt-1">
             <Num n={baseN.stamp} />
           </span>
+          <span className="absolute inset-0 grid place-items-center text-[11px] font-medium text-slate-400">請於此蓋發票章</span>
         </G>
 
         {triple ? (
