@@ -38,6 +38,10 @@ const VARIANTS: Record<Variant, string> = {
   danger: "text-red-600 hover:bg-red-50",
 };
 
+export function buttonClass(variant: Variant = "secondary"): string {
+  return `inline-flex min-h-11 items-center justify-center gap-2 rounded-ui px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:cursor-not-allowed disabled:opacity-40 md:min-h-10 ${VARIANTS[variant]}`;
+}
+
 export function Button({
   variant = "secondary",
   className = "",
@@ -51,7 +55,7 @@ export function Button({
       whileHover={disabled ? undefined : { y: -1 }}
       whileTap={disabled ? undefined : { scale: 0.96 }}
       transition={{ duration: 0.15, ease: EASE }}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-ui px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:cursor-not-allowed disabled:opacity-40 md:min-h-10 ${VARIANTS[variant]} ${className}`}
+      className={`${buttonClass(variant)} ${className}`}
       {...props}
     >
       {children}

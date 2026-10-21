@@ -1,10 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { SITE_NAME } from "@/lib/config";
+import Providers from "@/components/site/Providers";
+import SiteFooter from "@/components/site/SiteFooter";
+import SiteHeader from "@/components/site/SiteHeader";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME}｜免費線上報價單`,
-  description: "免費產生台灣報價單，支援未稅／含稅／免稅、國字大寫金額，可直接列印或存成 PDF。",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME}｜${SITE_TAGLINE}`,
+    template: `%s｜${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: `${SITE_NAME}｜${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
+    locale: "zh_TW",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
@@ -25,7 +39,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <Providers>
+          <SiteHeader />
+          <div className="flex flex-1 flex-col">{children}</div>
+          <SiteFooter />
+        </Providers>
+      </body>
     </html>
   );
 }
