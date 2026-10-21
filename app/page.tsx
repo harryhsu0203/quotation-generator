@@ -1,19 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Mail, MessageCircle } from "lucide-react";
 import ButtonLink from "@/components/site/ButtonLink";
-import CtaBand from "@/components/site/CtaBand";
-import Faq from "@/components/site/Faq";
-import QuoteMock from "@/components/site/QuoteMock";
+import BrandVisual from "@/components/site/BrandVisual";
 import { Reveal, RevealGroup, RevealItem } from "@/components/site/Reveal";
 import SectionHeading from "@/components/site/SectionHeading";
-import { AUDIENCES, FEATURES, PAINS, STEPS } from "@/components/site/content";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/config";
-import { FAQS, HOME_FAQ_IDS } from "@/lib/faq";
+import {
+  BRAND_ASSETS,
+  BRAND_SLOGAN,
+  BRAND_SUBSLOGAN,
+  COMPANY_NAME_EN,
+  COMPANY_NAME_ZH,
+  CONTACT_EMAIL,
+  LINE_URL,
+  SITE_DESCRIPTION,
+  SITE_FULL_NAME,
+  SITE_URL,
+  isPlaceholder,
+} from "@/lib/config";
+import { PRODUCTS, isAvailable } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: `${SITE_NAME}｜${SITE_TAGLINE}`,
+  title: SITE_FULL_NAME,
   description: SITE_DESCRIPTION,
   path: "/",
   absoluteTitle: true,
@@ -21,19 +30,17 @@ export const metadata: Metadata = pageMeta({
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: SITE_NAME,
-  description: SITE_DESCRIPTION,
+  "@type": "Organization",
+  name: COMPANY_NAME_EN,
+  alternateName: COMPANY_NAME_ZH,
   url: SITE_URL,
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  inLanguage: "zh-TW",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "TWD" },
-  featureList: FEATURES.map((f) => f.title),
+  logo: `${SITE_URL}${BRAND_ASSETS.icon}`,
+  description: SITE_DESCRIPTION,
 };
 
-export default function HomePage() {
-  const homeFaqs = FAQS.filter((f) => HOME_FAQ_IDS.includes(f.id));
+export default function CompanyHome() {
+  const emailReady = !isPlaceholder(CONTACT_EMAIL);
+  const lineReady = !isPlaceholder(LINE_URL);
 
   return (
     <>
@@ -43,153 +50,143 @@ export default function HomePage() {
       />
 
       {/* Hero */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-10 pt-8 md:pt-14">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-10 pt-8 md:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
           <Reveal>
-            <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
-              免費・免註冊・資料只存在你的瀏覽器
+            <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-600">
+              {COMPANY_NAME_ZH}・{COMPANY_NAME_EN}
             </span>
-            <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-ink md:text-5xl">
-              三分鐘，做出一張
-              <span className="whitespace-nowrap text-brand-600">專業的報價單</span>
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
-              專為台灣小店家與接案者設計。自動計算營業稅、檢查統一編號、轉換國字大寫金額，完成後直接列印或存成
-              PDF，寄給客戶。
-            </p>
+            <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-ink md:text-5xl">{BRAND_SLOGAN}</h1>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{BRAND_SUBSLOGAN}</p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <ButtonLink href="/quote" variant="primary" className="px-6">
-                免費開始製作
+              <ButtonLink href="#products" variant="primary" className="px-6">
+                探索產品
                 <ArrowRight className="size-4" aria-hidden />
               </ButtonLink>
-              <ButtonLink href="/templates">瀏覽範本</ButtonLink>
+              <ButtonLink href="/contact">聯絡我們</ButtonLink>
             </div>
-            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
-              {["自動計算營業稅", "統編即時檢查", "國字大寫金額"].map((t) => (
-                <li key={t} className="flex items-center gap-1.5">
-                  <Check className="size-4 text-emerald-600" aria-hidden />
-                  {t}
-                </li>
-              ))}
-            </ul>
           </Reveal>
           <Reveal delay={0.1}>
-            <QuoteMock />
+            <BrandVisual />
           </Reveal>
         </div>
       </section>
 
-      {/* 痛點 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+      {/* 產品 */}
+      <section id="products" className="mx-auto w-full max-w-6xl scroll-mt-20 px-4 py-12">
         <SectionHeading
-          eyebrow="PAIN POINTS"
-          title="用 Word、Excel 做報價單，是不是常遇到這些事？"
-          description="報價單看起來簡單，但每次都花不少時間在排版與計算上。"
+          eyebrow="PRODUCTS"
+          title="我們的產品"
+          description="每個產品都專注解決一件事，並盡量做到簡單、好上手。"
         />
-        <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {PAINS.map(({ icon: Icon, title, text }) => (
-            <RevealItem key={title} className="card p-5">
-              <span className="grid size-10 place-items-center rounded-ui bg-amber-50 text-amber-600">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-[15px] font-bold">{title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      </section>
-
-      {/* 功能特色 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
-        <SectionHeading
-          eyebrow="FEATURES"
-          title="把重複又容易出錯的部分，交給工具"
-          description="你只需要專心填內容，計算與排版自動完成。"
-        />
-        <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map(({ icon: Icon, title, short }) => (
-            <RevealItem key={title} className="card p-5 transition-shadow hover:shadow-[0_8px_30px_rgb(15_23_42/0.08)]">
-              <span className="grid size-10 place-items-center rounded-ui bg-brand-50 text-brand-700">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-[15px] font-bold">{title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{short}</p>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-        <Reveal className="mt-6 text-center">
-          <Link href="/features" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brand-700 hover:underline">
-            查看完整功能介紹
-            <ArrowRight className="size-4" aria-hidden />
-          </Link>
-        </Reveal>
-      </section>
-
-      {/* 使用步驟 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
-        <SectionHeading eyebrow="HOW IT WORKS" title="三個步驟，完成一張報價單" />
         <RevealGroup className="grid gap-4 md:grid-cols-3">
-          {STEPS.map(({ icon: Icon, title, text }, i) => (
-            <RevealItem key={title} className="card relative p-5">
-              <div className="flex items-center gap-3">
-                <span className="grid size-8 place-items-center rounded-full bg-brand-700 text-sm font-bold text-white">{i + 1}</span>
-                <Icon className="size-5 text-brand-600" aria-hidden />
-              </div>
-              <h3 className="mt-4 text-[15px] font-bold">{title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      </section>
-
-      {/* 適用對象 */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
-        <SectionHeading
-          eyebrow="WHO IT'S FOR"
-          title="適合需要常常報價的你"
-          description="不論是個人接案還是小型團隊，都能快速做出一致、專業的報價單。"
-        />
-        <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {AUDIENCES.map(({ icon: Icon, title, text, href }) => {
-            const body = (
-              <>
-                <span className="grid size-10 shrink-0 place-items-center rounded-ui bg-brand-50 text-brand-700">
-                  <Icon className="size-5" aria-hidden />
-                </span>
-                <span>
-                  <span className="block text-[15px] font-bold">{title}</span>
-                  <span className="mt-1 block text-sm leading-relaxed text-muted">{text}</span>
-                </span>
-              </>
-            );
+          {PRODUCTS.map((p) => {
+            const Icon = p.icon;
+            const available = isAvailable(p);
             return (
-              <RevealItem key={title}>
-                {href ? (
-                  <Link href={href} className="card flex h-full gap-4 p-5 transition-shadow hover:shadow-[0_8px_30px_rgb(15_23_42/0.08)]">
-                    {body}
-                  </Link>
-                ) : (
-                  <div className="card flex h-full gap-4 p-5">{body}</div>
-                )}
+              <RevealItem key={p.slug} className="h-full">
+                <div
+                  className={`flex h-full flex-col rounded-[1rem] p-5 ${
+                    available
+                      ? "card transition-shadow hover:shadow-[0_8px_30px_rgb(11_27_43/0.08)]"
+                      : "border border-dashed border-slate-300 bg-white/50"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span
+                      className={`grid size-11 place-items-center rounded-ui ${
+                        available ? "bg-brand-50 text-brand-700" : "bg-slate-100 text-slate-400"
+                      }`}
+                    >
+                      <Icon className="size-5" aria-hidden />
+                    </span>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                        available ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-muted"
+                      }`}
+                    >
+                      {available ? "可使用" : "即將推出"}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold">
+                    {p.name}
+                    {p.nameZh && <span className="ml-2 text-sm font-normal text-muted">{p.nameZh}</span>}
+                  </h3>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
+                  {available && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <ButtonLink href={p.href}>了解更多</ButtonLink>
+                      {p.appHref && (
+                        <ButtonLink href={p.appHref} variant="primary">
+                          開始使用
+                        </ButtonLink>
+                      )}
+                    </div>
+                  )}
+                </div>
               </RevealItem>
             );
           })}
         </RevealGroup>
       </section>
 
-      {/* FAQ */}
-      <section className="mx-auto w-full max-w-3xl px-4 py-12">
-        <SectionHeading eyebrow="FAQ" title="常見問題" />
-        <Faq items={homeFaqs} />
+      {/* 關於 */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+        <Reveal>
+          <div className="grid gap-6 rounded-[1.25rem] bg-brand-800 p-6 text-white md:grid-cols-[1fr_1.4fr] md:p-10">
+            <div>
+              <div className="text-xs font-bold tracking-widest text-brand-200">ABOUT</div>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight md:text-3xl">關於 {COMPANY_NAME_EN}</h2>
+            </div>
+            <div>
+              <p className="text-[15px] leading-relaxed text-slate-300">[在此填寫公司簡介：我們是誰、做什麼、想解決什麼問題。]</p>
+              <Link href="/about" className="mt-4 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-white hover:underline">
+                進一步了解
+                <ArrowRight className="size-4" aria-hidden />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* 聯絡 */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-12">
+        <SectionHeading eyebrow="CONTACT" title="聯絡我們" description="使用上的問題、功能建議或合作想法，都歡迎與我們聯繫。" />
+        <RevealGroup className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
+          <RevealItem className="card flex items-center gap-4 p-5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-ui bg-brand-50 text-brand-700">
+              <Mail className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <div className="text-sm font-bold">Email</div>
+              {emailReady ? (
+                <a href={`mailto:${CONTACT_EMAIL}`} className="break-all text-sm text-brand-600 hover:underline">{CONTACT_EMAIL}</a>
+              ) : (
+                <div className="break-all text-sm text-slate-400">{CONTACT_EMAIL}</div>
+              )}
+            </div>
+          </RevealItem>
+          <RevealItem className="card flex items-center gap-4 p-5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-ui bg-emerald-50 text-emerald-600">
+              <MessageCircle className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <div className="text-sm font-bold">LINE 官方帳號</div>
+              {lineReady ? (
+                <a href={LINE_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-600 hover:underline">加入好友</a>
+              ) : (
+                <div className="break-all text-sm text-slate-400">{LINE_URL}</div>
+              )}
+            </div>
+          </RevealItem>
+        </RevealGroup>
         <Reveal className="mt-6 text-center">
-          <Link href="/faq" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brand-700 hover:underline">
-            看更多常見問題
+          <Link href="/contact" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brand-600 hover:underline">
+            更多聯絡方式
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </Reveal>
       </section>
-
-      <CtaBand />
     </>
   );
 }

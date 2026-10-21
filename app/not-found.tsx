@@ -20,7 +20,7 @@ export default function NotFound() {
             <Home className="size-4" aria-hidden />
             回到首頁
           </ButtonLink>
-          <ButtonLink href="/quote">開始製作報價單</ButtonLink>
+          <ButtonLink href="/quote/app">開始製作報價單</ButtonLink>
         </div>
       </Reveal>
     </section>

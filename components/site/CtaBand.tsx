@@ -5,7 +5,7 @@ import { Reveal } from "./Reveal";
 export default function CtaBand({
   title = "現在就做一張報價單",
   description = "免費、免註冊，打開就能開始。資料只存在你的瀏覽器。",
-  href = "/quote",
+  href = "/quote/app",
   label = "免費開始製作",
 }: {
   title?: string;

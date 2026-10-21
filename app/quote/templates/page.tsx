@@ -11,7 +11,7 @@ export const metadata: Metadata = pageMeta({
   title: "報價單範本｜免費線上產生",
   description:
     "電腦組裝、電腦維修、平面設計、室內裝修、網站設計等行業的報價單範本，一鍵帶入範例品項，再依實際情況修改。",
-  path: "/templates",
+  path: "/quote/templates",
   absoluteTitle: true,
 });
 
@@ -28,7 +28,7 @@ export default function TemplatesPage() {
           {TEMPLATES.map((t) => (
             <RevealItem key={t.slug}>
               <Link
-                href={`/templates/${t.slug}`}
+                href={`/quote/templates/${t.slug}`}
                 title={templateTitle(t)}
                 className="card group flex h-full flex-col p-5 transition-shadow hover:shadow-[0_8px_30px_rgb(15_23_42/0.08)]"
               >

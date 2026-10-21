@@ -8,7 +8,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "常見問題",
   description:
-    "資料存在哪裡、是否免費、怎麼存 PDF、統編怎麼驗證、換電腦資料會不見嗎、可以商用嗎——報價單產生器的常見問題。",
+    "資料存在哪裡、是否免費、怎麼存 PDF、統編怎麼驗證、換電腦資料會不見嗎、可以商用嗎——Seqlon Quote 報價單的常見問題。",
   path: "/faq",
 });
 

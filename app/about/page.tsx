@@ -3,12 +3,12 @@ import { Eye, Lock, Sparkles } from "lucide-react";
 import CtaBand from "@/components/site/CtaBand";
 import PageHero from "@/components/site/PageHero";
 import { Reveal, RevealGroup, RevealItem } from "@/components/site/Reveal";
-import { SITE_NAME } from "@/lib/config";
+import { COMPANY_NAME_EN, COMPANY_NAME_ZH } from "@/lib/config";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "關於我們",
-  description: `認識${SITE_NAME}：為什麼做這個工具，以及我們對簡單、透明與隱私的堅持。`,
+  title: `關於 ${COMPANY_NAME_EN}`,
+  description: `認識${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：我們為什麼做這些工具，以及對簡單、透明與隱私的堅持。`,
   path: "/about",
 });
 
@@ -21,15 +21,19 @@ const VALUES = [
 export default function AboutPage() {
   return (
     <>
-      <PageHero eyebrow="ABOUT" title="關於我們" description="[在此填寫：一句話介紹團隊或這個工具的由來。]" />
+      <PageHero
+        eyebrow="ABOUT"
+        title={`關於 ${COMPANY_NAME_EN}`}
+        description={`${COMPANY_NAME_ZH}（${COMPANY_NAME_EN}）：[在此填寫一句話公司介紹。]`}
+      />
 
       <section className="mx-auto w-full max-w-3xl space-y-4 px-4 py-6">
         <Reveal className="space-y-4 text-[15px] leading-relaxed text-slate-700">
-          <h2 className="text-xl font-bold text-ink">為什麼做這個工具</h2>
-          <p>[在此填寫：說明你發現了什麼問題，例如小店家或接案者在製作報價單時遇到的困擾。]</p>
+          <h2 className="text-xl font-bold text-ink">我們為什麼做這些工具</h2>
+          <p>[在此填寫：說明你發現了什麼問題，例如小型企業或個人工作者在日常工作中遇到的困擾。]</p>
           <p>[在此填寫：說明你是怎麼想到用網頁工具來解決，以及希望達成的目標。]</p>
           <h2 className="pt-2 text-xl font-bold text-ink">我們的理念</h2>
-          <p>[在此填寫：用幾句話說明這個工具背後的理念與未來的方向。]</p>
+          <p>[在此填寫：用幾句話說明品牌背後的理念與未來的方向。]</p>
         </Reveal>
       </section>
 
@@ -47,7 +51,12 @@ export default function AboutPage() {
         </RevealGroup>
       </section>
 
-      <CtaBand />
+      <CtaBand
+        title="試試 Seqlon Quote"
+        description="目前可使用的產品：免費線上報價單，免註冊、資料只存在你的瀏覽器。"
+        href="/quote"
+        label="認識 Seqlon Quote"
+      />
     </>
   );
 }

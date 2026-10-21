@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_NAME } from "./config";
+import { BRAND_ASSETS, SITE_NAME } from "./config";
 
 interface PageMetaInput {
   title: string;
@@ -23,7 +23,8 @@ export function pageMeta({ title, description, path, absoluteTitle }: PageMetaIn
       siteName: SITE_NAME,
       locale: "zh_TW",
       type: "website",
+      images: [{ url: BRAND_ASSETS.icon, width: 96, height: 96, alt: SITE_NAME }],
     },
-    twitter: { card: "summary", title: fullTitle, description },
+    twitter: { card: "summary", title: fullTitle, description, images: [BRAND_ASSETS.icon] },
   };
 }

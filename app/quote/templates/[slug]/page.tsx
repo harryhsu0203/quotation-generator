@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return pageMeta({
     title: templateTitle(t),
     description: `${t.name}報價單範本：${t.summary}免費線上產生，自動計算營業稅與國字大寫金額，可直接列印或存成 PDF。`,
-    path: `/templates/${t.slug}`,
+    path: `/quote/templates/${t.slug}`,
     absoluteTitle: true,
   });
 }
@@ -42,7 +42,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
   return (
     <>
       <PageHero eyebrow="TEMPLATE" title={`${t.name}報價單範本`} description={t.summary}>
-        <ButtonLink href={`/quote?template=${t.slug}`} variant="primary" className="px-6">
+        <ButtonLink href={`/quote/app?template=${t.slug}`} variant="primary" className="px-6">
           使用此範本開始編輯
           <ArrowRight className="size-4" aria-hidden />
         </ButtonLink>
@@ -134,7 +134,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
           {others.map((o) => (
             <Link
               key={o.slug}
-              href={`/templates/${o.slug}`}
+              href={`/quote/templates/${o.slug}`}
               className="inline-flex min-h-11 items-center rounded-full border border-line bg-white px-4 text-sm text-slate-700 transition-colors hover:border-brand-500 hover:text-brand-700"
             >
               {o.name}報價單
@@ -146,7 +146,7 @@ export default async function TemplatePage({ params }: { params: Promise<Params>
       <CtaBand
         title={`用${t.name}範本開始製作`}
         description="帶入範例品項後，可自由新增、刪除與修改。"
-        href={`/quote?template=${t.slug}`}
+        href={`/quote/app?template=${t.slug}`}
         label="使用此範本開始編輯"
       />
     </>

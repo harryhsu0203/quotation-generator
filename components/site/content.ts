@@ -102,12 +102,12 @@ export const PAINS = [
 ];
 
 export const AUDIENCES: { icon: LucideIcon; title: string; text: string; href?: string }[] = [
-  { icon: Laptop, title: "接案者", text: "設計、寫作、開發，用一份清楚的報價單開啟合作。", href: "/templates/graphic-design" },
-  { icon: Users, title: "工作室", text: "固定的公司資訊自動帶入，每次只需要改客戶與品項。", href: "/templates/website-design" },
+  { icon: Laptop, title: "接案者", text: "設計、寫作、開發，用一份清楚的報價單開啟合作。", href: "/quote/templates/graphic-design" },
+  { icon: Users, title: "工作室", text: "固定的公司資訊自動帶入，每次只需要改客戶與品項。", href: "/quote/templates/website-design" },
   { icon: Store, title: "小店家", text: "快速給客戶一張正式的書面報價，不用另外買軟體。" },
-  { icon: Hammer, title: "維修業", text: "把檢測、零件與工資分開列，客戶一看就懂。", href: "/templates/pc-repair" },
-  { icon: CalendarCheck, title: "工程業", text: "依工項與坪數分項報價，註明追加工程的處理方式。", href: "/templates/interior-renovation" },
-  { icon: Palette, title: "電腦組裝", text: "逐項列出零組件與價格，讓比價更透明。", href: "/templates/pc-build" },
+  { icon: Hammer, title: "維修業", text: "把檢測、零件與工資分開列，客戶一看就懂。", href: "/quote/templates/pc-repair" },
+  { icon: CalendarCheck, title: "工程業", text: "依工項與坪數分項報價，註明追加工程的處理方式。", href: "/quote/templates/interior-renovation" },
+  { icon: Palette, title: "電腦組裝", text: "逐項列出零組件與價格，讓比價更透明。", href: "/quote/templates/pc-build" },
 ];
 
 export const STEPS = [

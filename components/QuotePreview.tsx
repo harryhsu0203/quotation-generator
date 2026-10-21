@@ -1,6 +1,6 @@
 import { CountUp } from "./ui";
 import ScaledPaper from "./ScaledPaper";
-import { SITE_NAME } from "@/lib/config";
+import { QUOTE_PRODUCT } from "@/lib/products";
 import { toChineseAmount } from "@/lib/chinese-amount";
 import { formatNTD, formatNumber } from "@/lib/format";
 import { calcTotals, itemAmount } from "@/lib/tax";
@@ -179,7 +179,7 @@ export default function QuotePreview({ seller, quote }: Props) {
         </div>
 
         <footer className="mt-10 border-t border-line pt-3 text-center text-[10px] text-slate-400">
-          本報價單由 {SITE_NAME} 免費產生
+          本報價單由 {QUOTE_PRODUCT.name} 免費產生
         </footer>
       </div>
     </ScaledPaper>

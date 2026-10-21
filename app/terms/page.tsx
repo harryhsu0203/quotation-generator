@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import LegalPage, { type LegalSection } from "@/components/site/LegalPage";
-import { CONTACT_EMAIL, SITE_NAME } from "@/lib/config";
+import { COMPANY_NAME_EN, CONTACT_EMAIL } from "@/lib/config";
+import { QUOTE_PRODUCT } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "使用條款",
-  description: "使用報價單產生器前，請先閱讀使用條款。",
+  description: "使用 Seqlon 的產品與網站前，請先閱讀使用條款。",
   path: "/terms",
 });
 
@@ -13,7 +14,7 @@ const SECTIONS: LegalSection[] = [
   {
     title: "服務內容",
     body: [
-      `${SITE_NAME}是一個在瀏覽器中運作的線上工具，協助你填寫、計算並列印報價單。目前提供免費使用，不需註冊。`,
+      `${COMPANY_NAME_EN} 提供多項線上工具，目前可使用的是 ${QUOTE_PRODUCT.name}：一個在瀏覽器中運作的工具，協助你填寫、計算並列印報價單。目前提供免費使用，不需註冊。`,
     ],
   },
   {

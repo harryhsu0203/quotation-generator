@@ -80,13 +80,13 @@ export default function QuoteTool() {
     }));
   };
 
-  // 從範本頁進入（/quote?template=slug）：帶入範本品項
+  // 從範本頁進入（/quote/app?template=slug）：帶入範本品項
   useEffect(() => {
     if (!ready || quote.number === "" || templateHandled.current) return;
     templateHandled.current = true;
     const slug = new URLSearchParams(window.location.search).get("template");
     if (!slug) return;
-    window.history.replaceState(null, "", "/quote");
+    window.history.replaceState(null, "", "/quote/app");
     const t = getTemplate(slug);
     if (!t) return;
     const hasContent = quote.items.some((i) => i.name.trim() || i.unitPrice > 0);

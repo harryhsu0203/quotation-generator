@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import LegalPage, { type LegalSection } from "@/components/site/LegalPage";
-import { CONTACT_EMAIL, SITE_NAME } from "@/lib/config";
+import { COMPANY_NAME_EN, CONTACT_EMAIL } from "@/lib/config";
+import { QUOTE_PRODUCT } from "@/lib/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "隱私權政策",
-  description: "你在報價單產生器填寫的所有資料只存在你的瀏覽器，不會上傳到伺服器。",
+  description: "你在 Seqlon Quote 填寫的所有資料只存在你的瀏覽器，不會上傳到伺服器。",
   path: "/privacy",
 });
 
@@ -13,7 +14,7 @@ const SECTIONS: LegalSection[] = [
   {
     title: "資料只存在你的瀏覽器",
     body: [
-      `${SITE_NAME}沒有資料庫，也不需要註冊或登入。你在工具中填寫的公司資料、客戶資料、品項與圖片（Logo、印章），只會儲存在你自己裝置的瀏覽器（localStorage）。`,
+      `${COMPANY_NAME_EN} 網站目前沒有資料庫，${QUOTE_PRODUCT.name} 也不需要註冊或登入。你在工具中填寫的公司資料、客戶資料、品項與圖片（Logo、印章），只會儲存在你自己裝置的瀏覽器（localStorage）。`,
       "這些資料不會被傳送到我們的伺服器，我們無法讀取、備份或還原這些內容。",
     ],
   },
