@@ -373,3 +373,34 @@ body {
     background-color: #eff6ff;
   }
 }
+
+/* 報價單品項表格：固定欄寬（colgroup）、品名／規格靠左並自動換行、數字欄等寬 */
+table.items-fixed {
+  table-layout: fixed;
+}
+.items-fixed th,
+.items-fixed td {
+  vertical-align: top;
+}
+.items-fixed :is(th, td):nth-child(2),
+.items-fixed :is(th, td):nth-child(3) {
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.items-fixed :is(th, td):nth-child(4),
+.items-fixed :is(th, td):nth-child(5) {
+  text-align: center;
+}
+.items-fixed :is(th, td):nth-child(6),
+.items-fixed :is(th, td):nth-child(7) {
+  text-align: right;
+}
+.items-fixed td:nth-child(n + 4) {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.items-fixed td[colspan] {
+  text-align: center;
+}

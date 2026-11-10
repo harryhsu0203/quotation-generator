@@ -60,3 +60,18 @@ export function SellerStamp({ seller, className = "max-h-20 max-w-full" }: { sel
 export function ProductFooter({ className = "" }: { className?: string }) {
   return <footer className={`text-center text-[10px] text-slate-400 ${className}`}>本報價單由 Seqlon {QUOTE_PRODUCT.name} 免費產生</footer>;
 }
+
+/** 品項表格欄寬（四種版面共用）：# 5%、品名 28%、規格 27%、數量 8%、單位 8%、單價 12%、小計 12% */
+export function ItemsColGroup() {
+  return (
+    <colgroup>
+      <col style={{ width: "5%" }} />
+      <col style={{ width: "28%" }} />
+      <col style={{ width: "27%" }} />
+      <col style={{ width: "8%" }} />
+      <col style={{ width: "8%" }} />
+      <col style={{ width: "12%" }} />
+      <col style={{ width: "12%" }} />
+    </colgroup>
+  );
+}

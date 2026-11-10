@@ -1,6 +1,6 @@
 import { formatNumber } from "@/lib/format";
 import { itemAmount } from "@/lib/tax";
-import { ProductFooter, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
+import { ItemsColGroup, ProductFooter, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
 
 const MIN_ROWS = 8;
 const cell = "border border-slate-800 px-2 py-1.5";
@@ -25,9 +25,9 @@ export default function FormalTemplate({ seller, quote }: TemplateProps) {
       <table className="mt-5 w-full border-collapse">
         <tbody>
           <tr>
-            <th className={`${cell} acc-tint w-24 text-left font-bold`}>客戶名稱</th>
+            <th className={`${cell} acc-tint text-left font-bold`}>客戶名稱</th>
             <td className={cell}>{quote.customer.name}</td>
-            <th className={`${cell} acc-tint w-24 text-left font-bold`}>報價單號</th>
+            <th className={`${cell} acc-tint text-left font-bold`}>報價單號</th>
             <td className={`${cell} w-44 tabular-nums`}>{quote.number}</td>
           </tr>
           <tr>
@@ -57,16 +57,17 @@ export default function FormalTemplate({ seller, quote }: TemplateProps) {
         </tbody>
       </table>
 
-      <table data-items-table className="mt-3 w-full border-collapse">
+      <table data-items-table className="items-fixed mt-3 w-full border-collapse">
+<ItemsColGroup />
         <thead>
           <tr className="acc-tint2">
-            <th className={`${cell} w-14 whitespace-nowrap text-center font-bold`}>項次</th>
+            <th className={`${cell} !px-0.5 text-center font-bold`}>項次</th>
             <th className={`${cell} text-left font-bold`}>品　名</th>
             <th className={`${cell} text-left font-bold`}>規　格</th>
-            <th className={`${cell} w-14 text-center font-bold`}>數量</th>
-            <th className={`${cell} w-12 text-center font-bold`}>單位</th>
-            <th className={`${cell} w-24 text-right font-bold`}>單價</th>
-            <th className={`${cell} w-28 text-right font-bold`}>金額</th>
+            <th className={`${cell} text-center font-bold`}>數量</th>
+            <th className={`${cell} text-center font-bold`}>單位</th>
+            <th className={`${cell} text-right font-bold`}>單價</th>
+            <th className={`${cell} text-right font-bold`}>金額</th>
           </tr>
         </thead>
         <tbody>
@@ -126,11 +127,11 @@ export default function FormalTemplate({ seller, quote }: TemplateProps) {
       <table className="avoid-break mt-3 w-full border-collapse">
         <tbody>
           <tr>
-            <th className={`${cell} acc-tint w-24 align-top text-left font-bold`}>付款條件</th>
+            <th className={`${cell} acc-tint align-top text-left font-bold`}>付款條件</th>
             <td className={`${cell} h-14 whitespace-pre-wrap align-top`}>{quote.paymentTerms}</td>
           </tr>
           <tr>
-            <th className={`${cell} acc-tint w-24 align-top text-left font-bold`}>備　　註</th>
+            <th className={`${cell} acc-tint align-top text-left font-bold`}>備　　註</th>
             <td className={`${cell} h-14 whitespace-pre-wrap align-top`}>{quote.notes}</td>
           </tr>
         </tbody>

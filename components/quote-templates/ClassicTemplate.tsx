@@ -1,7 +1,7 @@
 import { CountUp } from "@/components/ui";
 import { formatNTD, formatNumber } from "@/lib/format";
 import { itemAmount } from "@/lib/tax";
-import { ProductFooter, Row, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
+import { ItemsColGroup, ProductFooter, Row, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
 
 /** 經典：清楚平衡的商務版面。 */
 export default function ClassicTemplate({ seller, quote }: TemplateProps) {
@@ -50,16 +50,17 @@ export default function ClassicTemplate({ seller, quote }: TemplateProps) {
           </div>
         </div>
 
-        <table data-items-table className="mt-7 w-full border-collapse text-xs">
+        <table data-items-table className="items-fixed mt-7 w-full border-collapse text-xs">
+<ItemsColGroup />
           <thead>
             <tr className="acc-tint2 text-ink">
-              <th className="w-9 rounded-tl-md px-2 py-2 text-center font-bold">#</th>
+              <th className="rounded-tl-md px-2 py-2 text-center font-bold">#</th>
               <th className="px-2 py-2 text-left font-bold">品名</th>
               <th className="px-2 py-2 text-left font-bold">規格</th>
-              <th className="w-14 px-2 py-2 text-center font-bold">數量</th>
-              <th className="w-12 px-2 py-2 text-center font-bold">單位</th>
-              <th className="w-24 px-2 py-2 text-right font-bold">單價</th>
-              <th className="w-28 rounded-tr-md px-2 py-2 text-right font-bold">小計</th>
+              <th className="px-2 py-2 text-center font-bold">數量</th>
+              <th className="px-2 py-2 text-center font-bold">單位</th>
+              <th className="px-2 py-2 text-right font-bold">單價</th>
+              <th className="rounded-tr-md px-2 py-2 text-right font-bold">小計</th>
             </tr>
           </thead>
           <tbody>

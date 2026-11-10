@@ -1,7 +1,7 @@
 import { CountUp } from "@/components/ui";
 import { formatNTD, formatNumber } from "@/lib/format";
 import { itemAmount } from "@/lib/tax";
-import { ProductFooter, Row, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
+import { ItemsColGroup, ProductFooter, Row, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
 
 /** 現代：頂部整條主題色色帶、卡片式客戶與單據資訊。 */
 export default function ModernTemplate({ seller, quote }: TemplateProps) {
@@ -52,16 +52,17 @@ export default function ModernTemplate({ seller, quote }: TemplateProps) {
       </div>
       {seller.address && <div className="mt-2 text-[11px] text-slate-500">公司地址：{seller.address}</div>}
 
-      <table data-items-table className="mt-6 w-full border-collapse text-xs">
+      <table data-items-table className="items-fixed mt-6 w-full border-collapse text-xs">
+<ItemsColGroup />
         <thead>
           <tr className="acc-border border-b-2 text-left">
-            <th className="acc-text w-9 px-2 py-2 text-center font-bold">#</th>
+            <th className="acc-text px-2 py-2 text-center font-bold">#</th>
             <th className="acc-text px-2 py-2 font-bold">品名</th>
             <th className="acc-text px-2 py-2 font-bold">規格</th>
-            <th className="acc-text w-14 px-2 py-2 text-center font-bold">數量</th>
-            <th className="acc-text w-12 px-2 py-2 text-center font-bold">單位</th>
-            <th className="acc-text w-24 px-2 py-2 text-right font-bold">單價</th>
-            <th className="acc-text w-28 px-2 py-2 text-right font-bold">小計</th>
+            <th className="acc-text px-2 py-2 text-center font-bold">數量</th>
+            <th className="acc-text px-2 py-2 text-center font-bold">單位</th>
+            <th className="acc-text px-2 py-2 text-right font-bold">單價</th>
+            <th className="acc-text px-2 py-2 text-right font-bold">小計</th>
           </tr>
         </thead>
         <tbody>

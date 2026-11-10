@@ -1,7 +1,7 @@
 import { CountUp } from "@/components/ui";
 import { formatNTD, formatNumber } from "@/lib/format";
 import { itemAmount } from "@/lib/tax";
-import { ProductFooter, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
+import { ItemsColGroup, ProductFooter, SellerLogo, SellerStamp, TAX_LABEL, quoteView, type TemplateProps } from "./shared";
 
 function Field({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
@@ -54,16 +54,17 @@ export default function MinimalTemplate({ seller, quote }: TemplateProps) {
         </div>
       </div>
 
-      <table data-items-table className="mt-5 w-full border-collapse text-[11px]">
+      <table data-items-table className="items-fixed mt-5 w-full border-collapse text-[11px]">
+<ItemsColGroup />
         <thead>
           <tr className="border-b border-neutral-900 text-left text-[9px] uppercase tracking-[0.2em] text-neutral-500">
-            <th className="w-8 py-2 font-normal">#</th>
+            <th className="py-2 font-normal">#</th>
             <th className="py-2 font-normal">品名</th>
             <th className="py-2 font-normal">規格</th>
-            <th className="w-14 py-2 text-center font-normal">數量</th>
-            <th className="w-12 py-2 text-center font-normal">單位</th>
-            <th className="w-24 py-2 text-right font-normal">單價</th>
-            <th className="w-28 py-2 text-right font-normal">小計</th>
+            <th className="py-2 text-center font-normal">數量</th>
+            <th className="py-2 text-center font-normal">單位</th>
+            <th className="py-2 text-right font-normal">單價</th>
+            <th className="py-2 text-right font-normal">小計</th>
           </tr>
         </thead>
         <tbody>
