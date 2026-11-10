@@ -71,7 +71,7 @@ export default function FormalTemplate({ seller, quote }: TemplateProps) {
         </thead>
         <tbody>
           {quote.items.map((it, i) => (
-            <tr key={it.id}>
+            <tr key={it.id} data-item-id={it.id}>
               <td className={`${cell} text-center tabular-nums`}>{i + 1}</td>
               <td className={cell}>{it.name}</td>
               <td className={cell}>{it.spec}</td>

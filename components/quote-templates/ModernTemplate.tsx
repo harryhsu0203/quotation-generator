@@ -66,7 +66,7 @@ export default function ModernTemplate({ seller, quote }: TemplateProps) {
         </thead>
         <tbody>
           {quote.items.map((it, i) => (
-            <tr key={it.id} className="border-b border-line">
+            <tr key={it.id} data-item-id={it.id} className="border-b border-line">
               <td className="px-2 py-2.5 text-center text-slate-400">{i + 1}</td>
               <td className="px-2 py-2.5 font-medium text-ink">{it.name}</td>
               <td className="px-2 py-2.5 text-slate-600">{it.spec}</td>

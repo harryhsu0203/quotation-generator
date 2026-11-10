@@ -302,3 +302,74 @@ body {
     display: table-header-group;
   }
 }
+
+/* 編輯中品項：預覽同步高亮（僅畫面；列印與 PDF 的複製頁不含 data-active） */
+.quote-live tr > td {
+  transition: background-color 0.4s ease;
+}
+.quote-live tr[data-active] > td {
+  background-color: #dbeafe !important;
+}
+@media print {
+  .quote-live tr[data-active] > td {
+    background-color: unset !important;
+  }
+}
+
+/* 品項編輯表格：編輯區夠寬為單列，否則為卡片（品名、規格各一整行） */
+.items-wrap {
+  container-type: inline-size;
+}
+.item-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 0.8fr 0.8fr 1.2fr 1.2fr;
+}
+.item-grid > * {
+  min-width: 0;
+}
+.item-head {
+  display: none;
+}
+.item-title,
+.cell-name,
+.cell-spec,
+.cell-actions {
+  grid-column: 1 / -1;
+}
+.item-row {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.item-row:focus-within {
+  background-color: #eff6ff;
+  box-shadow: inset 3px 0 0 var(--color-brand-500);
+}
+@container (min-width: 820px) {
+  .item-grid {
+    grid-template-columns: minmax(160px, 2.2fr) minmax(120px, 1.5fr) 80px 80px 110px 90px 7.5rem;
+    align-items: start;
+  }
+  .item-head {
+    display: grid;
+  }
+  .item-title,
+  .item-label {
+    display: none;
+  }
+  .cell-name,
+  .cell-spec,
+  .cell-actions {
+    grid-column: auto;
+  }
+  .cell-total {
+    padding-top: 0.6rem;
+  }
+  .item-row {
+    border-color: transparent;
+    background-color: transparent;
+    padding: 0.25rem;
+  }
+  .item-row:focus-within {
+    background-color: #eff6ff;
+  }
+}

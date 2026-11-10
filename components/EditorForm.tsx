@@ -19,6 +19,7 @@ interface Props {
   onSellerChange: (s: Seller) => void;
   onQuoteChange: (q: Quote) => void;
   onStyleChange: (s: QuoteStyle) => void;
+  onActiveItemChange?: (id: string | null) => void;
 }
 
 function taxIdHint(id: string): string | undefined {
@@ -34,7 +35,7 @@ const TAX_OPTIONS: { value: TaxMode; label: string; note: string }[] = [
   { value: "none", label: "免稅", note: "不計營業稅" },
 ];
 
-export default function EditorForm({ seller, quote, style, onSellerChange, onQuoteChange, onStyleChange }: Props) {
+export default function EditorForm({ seller, quote, style, onSellerChange, onQuoteChange, onStyleChange, onActiveItemChange }: Props) {
   const [imgError, setImgError] = useState("");
   // 我方資訊已填過就預設收合（掛載時 seller 已從 localStorage 載入）
   const [sellerFilled] = useState(() => seller.name.trim() !== "");
@@ -170,7 +171,7 @@ export default function EditorForm({ seller, quote, style, onSellerChange, onQuo
         description="品名、數量與單價，可調整順序"
         summary={`${quote.items.length} 個品項`}
       >
-        <ItemsTable items={quote.items} onChange={(items) => setQuote({ items })} />
+        <ItemsTable items={quote.items} onChange={(items) => setQuote({ items })} onActiveChange={onActiveItemChange} />
       </Section>
 
       <Section

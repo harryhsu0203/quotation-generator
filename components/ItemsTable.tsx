@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { Button, EASE, IconButton } from "./ui";
@@ -10,13 +11,26 @@ import { newItem, type Item } from "@/lib/types";
 interface Props {
   items: Item[];
   onChange: (items: Item[]) => void;
+  /** 正在編輯的品項 id；離開時為 null */
+  onActiveChange?: (id: string | null) => void;
 }
 
-/** 手機：6 欄卡片；桌機：單列 12 欄 */
-const GRID = "grid grid-cols-6 gap-x-2 gap-y-2 md:grid-cols-[minmax(0,3fr)_minmax(0,2.5fr)_4.5rem_4rem_6rem_5.5rem_auto] md:items-center";
+/** 多行輸入框：1 行起，依內容自動長高 */
+function AutoTextarea({ value, ...rest }: Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "value"> & { value: string }) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight + 2}px`;
+  }, [value]);
+  return <textarea ref={ref} rows={1} value={value} className="input block w-full min-w-0 resize-none overflow-hidden leading-snug" {...rest} />;
+}
+
+/** 欄位排版見 globals.css 的 .item-grid：編輯區夠寬為單列，否則為卡片 */
 const HEAD = "text-xs font-medium text-muted";
 
-export default function ItemsTable({ items, onChange }: Props) {
+export default function ItemsTable({ items, onChange, onActiveChange }: Props) {
   const update = (id: string, patch: Partial<Item>) =>
     onChange(items.map((it) => (it.id === id ? { ...it, ...patch } : it)));
   const remove = (id: string) => onChange(items.filter((it) => it.id !== id));
@@ -30,15 +44,15 @@ export default function ItemsTable({ items, onChange }: Props) {
   const num = (v: string) => (v === "" ? 0 : Math.max(0, Number(v) || 0));
 
   return (
-    <div>
-      <div className={`${GRID} mb-2 hidden px-1 md:grid`}>
+    <div className="items-wrap">
+      <div className="item-grid item-head mb-2 px-1">
         <span className={HEAD}>品名</span>
         <span className={HEAD}>規格</span>
         <span className={HEAD}>數量</span>
         <span className={HEAD}>單位</span>
         <span className={HEAD}>單價</span>
         <span className={`${HEAD} text-right`}>小計</span>
-        <span className="w-[7.5rem]" />
+        <span className="item-actions-head" />
       </div>
 
       <div>
@@ -54,36 +68,42 @@ export default function ItemsTable({ items, onChange }: Props) {
               style={{ overflow: "hidden" }}
             >
               <div className="p-1 pb-3">
-                <div className="rounded-ui border border-line bg-slate-50/60 p-3 md:border-0 md:bg-transparent md:p-0">
-                  <div className={GRID}>
-                    <div className="col-span-6 flex items-center justify-between md:hidden">
+                <div
+                  className="item-row rounded-ui border border-line bg-slate-50/60 p-3"
+                  onFocus={() => onActiveChange?.(it.id)}
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onActiveChange?.(null);
+                  }}
+                >
+                  <div className="item-grid">
+                    <div className="item-title flex items-center justify-between">
                       <span className="text-xs font-bold text-brand-700">品項 {i + 1}</span>
                     </div>
-                    <label className="col-span-6 md:col-span-1">
-                      <span className={`${HEAD} md:sr-only`}>品名</span>
-                      <input className="input" placeholder="例：網站設計" value={it.name} onChange={(e) => update(it.id, { name: e.target.value })} />
+                    <label className="cell-name">
+                      <span className={`${HEAD} item-label`}>品名</span>
+                      <AutoTextarea placeholder="例：AI 主機建置" value={it.name} onChange={(e) => update(it.id, { name: e.target.value })} />
                     </label>
-                    <label className="col-span-6 md:col-span-1">
-                      <span className={`${HEAD} md:sr-only`}>規格</span>
-                      <input className="input" placeholder="例：RWD 五頁式" value={it.spec} onChange={(e) => update(it.id, { spec: e.target.value })} />
+                    <label className="cell-spec">
+                      <span className={`${HEAD} item-label`}>規格</span>
+                      <AutoTextarea placeholder="例：RTX 顯卡、64GB 記憶體" value={it.spec} onChange={(e) => update(it.id, { spec: e.target.value })} />
                     </label>
-                    <label className="col-span-2 md:col-span-1">
-                      <span className={`${HEAD} md:sr-only`}>數量</span>
-                      <input className="input tabular-nums" type="number" inputMode="decimal" min={0} value={it.quantity} onChange={(e) => update(it.id, { quantity: num(e.target.value) })} />
+                    <label className="cell-qty">
+                      <span className={`${HEAD} item-label`}>數量</span>
+                      <input className="input w-full min-w-0 tabular-nums" type="number" inputMode="decimal" min={0} value={it.quantity} onChange={(e) => update(it.id, { quantity: num(e.target.value) })} />
                     </label>
-                    <label className="col-span-2 md:col-span-1">
-                      <span className={`${HEAD} md:sr-only`}>單位</span>
-                      <input className="input" placeholder="式" value={it.unit} onChange={(e) => update(it.id, { unit: e.target.value })} />
+                    <label className="cell-unit">
+                      <span className={`${HEAD} item-label`}>單位</span>
+                      <input className="input w-full min-w-0" placeholder="式" value={it.unit} onChange={(e) => update(it.id, { unit: e.target.value })} />
                     </label>
-                    <label className="col-span-2 md:col-span-1">
-                      <span className={`${HEAD} md:sr-only`}>單價</span>
-                      <input className="input tabular-nums" type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={(e) => update(it.id, { unitPrice: num(e.target.value) })} />
+                    <label className="cell-price">
+                      <span className={`${HEAD} item-label`}>單價</span>
+                      <input className="input w-full min-w-0 tabular-nums" type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={(e) => update(it.id, { unitPrice: num(e.target.value) })} />
                     </label>
-                    <div className="col-span-3 text-sm md:col-span-1 md:text-right">
-                      <span className="text-muted md:hidden">小計 </span>
-                      <span className="font-bold tabular-nums">{formatNumber(itemAmount(it))}</span>
+                    <div className="cell-total text-right text-sm">
+                      <span className={`${HEAD} item-label`}>小計</span>
+                      <span className="block break-all font-bold tabular-nums">{formatNumber(itemAmount(it))}</span>
                     </div>
-                    <div className="col-span-3 flex justify-end gap-1.5 md:col-span-1">
+                    <div className="cell-actions flex justify-end gap-1.5">
                       <IconButton label="上移" disabled={i === 0} onClick={() => move(i, -1)}>
                         <ArrowUp className="size-4" />
                       </IconButton>

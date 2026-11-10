@@ -62,6 +62,8 @@ export default function QuoteTool() {
   const [saved, setSaved] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState("");
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const interacted = useRef(false);
   const templateHandled = useRef(false);
@@ -121,7 +123,24 @@ export default function QuoteTool() {
     ctl.start({ x: 0, opacity: 1, transition: { duration: 0.28, ease: EASE } });
   }, [tab, editCtl, previewCtl]);
 
-  const changeSeller = (s: Seller) => {
+  // 預覽中對應的品項列高亮（data-active 屬性；列印／PDF 的複製頁會移除），並捲動到該列
+  useEffect(() => {
+    const box = previewRef.current;
+    if (!box) return;
+    box.querySelectorAll("[data-active]").forEach((el) => el.removeAttribute("data-active"));
+    if (!activeItem) return;
+    const row = box.querySelector<HTMLElement>(`tr[data-item-id="${CSS.escape(activeItem)}"]`);
+    if (!row) return;
+    row.setAttribute("data-active", "");
+    const r = row.getBoundingClientRect();
+    if (r.height === 0) return; // 預覽被隱藏（手機的編輯分頁）
+    const b = box.getBoundingClientRect();
+    if (box.scrollHeight > box.clientHeight + 1 && (r.top < b.top + 8 || r.bottom > b.bottom - 8)) {
+      box.scrollTo({ top: box.scrollTop + (r.top - b.top) - box.clientHeight / 3, behavior: "smooth" });
+    }
+  }, [activeItem, quote.items]);
+
+  const changeSeller =(s: Seller) => {
     interacted.current = true;
     setSeller(s);
   };
@@ -215,11 +234,13 @@ export default function QuoteTool() {
                 onSellerChange={changeSeller}
                 onQuoteChange={changeQuote}
                 onStyleChange={changeStyle}
+                onActiveItemChange={setActiveItem}
               />
             </motion.div>
             <motion.div
               animate={previewCtl}
-              className={`print-area ${tab === "preview" ? "block" : "hidden"} lg:sticky lg:top-[7.5rem] lg:block lg:self-start`}
+              ref={previewRef}
+              className={`print-area quote-live ${tab === "preview" ? "block" : "hidden"} lg:sticky lg:top-[7.5rem] lg:block lg:max-h-[calc(100vh-8.5rem)] lg:self-start lg:overflow-y-auto`}
             >
               <QuotePreview seller={seller} quote={quote} style={style} />
             </motion.div>

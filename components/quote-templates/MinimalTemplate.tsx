@@ -68,7 +68,7 @@ export default function MinimalTemplate({ seller, quote }: TemplateProps) {
         </thead>
         <tbody>
           {quote.items.map((it, i) => (
-            <tr key={it.id} className="border-b border-neutral-200">
+            <tr key={it.id} data-item-id={it.id} className="border-b border-neutral-200">
               <td className="py-2.5 text-neutral-400">{i + 1}</td>
               <td className="py-2.5 font-medium">{it.name}</td>
               <td className="py-2.5 text-neutral-600">{it.spec}</td>

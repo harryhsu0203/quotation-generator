@@ -55,6 +55,7 @@ interface PageSpec {
 
 function buildPage(stage: HTMLElement, spec: PageSpec, padTop: number): HTMLElement {
   const clone = stage.cloneNode(true) as HTMLElement;
+  clone.querySelectorAll("[data-active]").forEach((el) => el.removeAttribute("data-active"));
   const container = clone.querySelector<HTMLElement>(".paper-inner");
   if (container) {
     container.style.minHeight = "0";

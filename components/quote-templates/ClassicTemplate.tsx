@@ -64,7 +64,7 @@ export default function ClassicTemplate({ seller, quote }: TemplateProps) {
           </thead>
           <tbody>
             {quote.items.map((it, i) => (
-              <tr key={it.id} className={i % 2 === 1 ? "bg-slate-50" : ""}>
+              <tr key={it.id} data-item-id={it.id} className={i % 2 === 1 ? "bg-slate-50" : ""}>
                 <td className="px-2 py-2 text-center text-slate-400">{i + 1}</td>
                 <td className="px-2 py-2 font-medium text-ink">{it.name}</td>
                 <td className="px-2 py-2 text-slate-600">{it.spec}</td>
